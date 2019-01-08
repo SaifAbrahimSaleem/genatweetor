@@ -1,0 +1,22 @@
+{
+  "name": "genatweetor",
+  "description": "2018/19 Undergraduate Project on Social Recommender Systems using Django and Python",
+  "image": "heroku/python",
+  "repository": "https://github.com/SaifAbrahimSaleem/genatweetor.git",
+  "keywords": ["python", "django" ],
+  "addons": [ "heroku-postgresql" ],
+  "env": {
+    "SECRET_KEY": {
+      "description": "^$)g*kvy#cp15s5w5oz(eh5^trs9wtwfxgyiz97x4kqmr!%1b$",
+      "generator": "secret"
+    }
+  },
+  "environments": {
+    "test": {
+      "scripts": {
+        "test-setup": "python manage.py collectstatic --noinput",
+        "test": "python manage.py test"
+      }
+    }
+  }
+}
