@@ -12,8 +12,21 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import django_heroku
+from twython import Twython
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+TEMPLATES_DIR = (
+    os.path.join(BASE_DIR, 'templates'),
+)
+
+#CALLBACK_URL = ' '
+TWITTER_KEY = 'OKWYt7fT3rHd6VjA8HOoRVpGM'
+TWITTER_SECRET = 'Wek3pFj602EOmufJzJzvgPpIaZjpol5U7PsTZhEGfZ9WFKstr0'
+twitter = Twython(TWITTER_KEY,TWITTER_SECRET)
+#auth = twitter.get_authentication_tokens(callback_url=CALLBACK_URL)
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -37,6 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #3rd party Apps
+    #Local Apps
     'genatweetor',
 ]
 
