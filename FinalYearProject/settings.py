@@ -28,7 +28,6 @@ twitter = Twython(TWITTER_KEY,TWITTER_SECRET)
 #auth = twitter.get_authentication_tokens(callback_url=CALLBACK_URL)
 
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -39,7 +38,6 @@ SECRET_KEY = '^$)g*kvy#cp15s5w5oz(eh5^trs9wtwfxgyiz97x4kqmr!%1b$'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -132,8 +130,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-
 STATIC_URL = '/static/'
-
+#MEDIA
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 # Activate Django-Heroku.
 django_heroku.settings(locals())

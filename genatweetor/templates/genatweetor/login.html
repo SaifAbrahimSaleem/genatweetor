@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% extends 'genatweetor/base.html' %}
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    {% block body-content %}
+      <form action="{% url 'genatweetor:login' %}" method="post" class="loginForm">
+        First name:<br>
+        <input type="text" name="firstname" value="Mickey">
+        <br>
+        Last name:<br>
+        <input type="text" name="lastname" value="Mouse">
+        <br><br>
+        <input type="submit" value="Submit">
+      </form>
+    {% endblock %}
+  </body>
+</html>

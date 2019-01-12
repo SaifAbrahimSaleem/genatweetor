@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from twython import Twython
 # Create your views here.
 
@@ -18,4 +18,13 @@ appname = 'genatweetor'
 
 #LOGIN VIEW
 def index(request):
-    return HttpResponse("HELLO TEST WORLD!")
+    context ={
+        'responseMessage' : "Welcome To genatweetor! Login to Continue!"
+    }
+    return render(request, 'genatweetor/login.html', context)
+
+def login(request):
+    context = {
+        'responseMessage' : "Successfully Logged in!"
+    }
+    return render(request, 'genatweetor/login.html', context)
