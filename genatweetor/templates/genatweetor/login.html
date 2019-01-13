@@ -9,13 +9,13 @@
   <body>
     {% block body-content %}
       <form action="{% url 'genatweetor:login' %}" method="post" class="loginForm">
-        First name:<br>
-        <input type="text" name="firstname" value="Mickey">
+        Username:<br>
+        <input type="text" name="username" placeholder="Enter Username" class="usernameInput">
         <br>
-        Last name:<br>
-        <input type="text" name="lastname" value="Mouse">
+        Password:<br>
+        <input type="text" name="password" placeholder="Enter Password" class="passwordInput">
         <br><br>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Login" class="loginBtn">
       </form>
     {% endblock %}
   </body>

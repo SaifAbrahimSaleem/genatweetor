@@ -11,8 +11,10 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import json
 import django_heroku
 from twython import Twython
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,14 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES_DIR = (
     os.path.join(BASE_DIR, 'templates'),
 )
-
-#CALLBACK_URL = ' '
-TWITTER_KEY = 'OKWYt7fT3rHd6VjA8HOoRVpGM'
-TWITTER_SECRET = 'Wek3pFj602EOmufJzJzvgPpIaZjpol5U7PsTZhEGfZ9WFKstr0'
-twitter = Twython(TWITTER_KEY,TWITTER_SECRET)
-#auth = twitter.get_authentication_tokens(callback_url=CALLBACK_URL)
-
-
+credentials = {
+    "CONSUMER_KEY": "OKWYt7fT3rHd6VjA8HOoRVpGM",
+    "CONSUMER_SECRET": "Wek3pFj602EOmufJzJzvgPpIaZjpol5U7PsTZhEGfZ9WFKstr0",
+    "ACCESS_TOKEN": "49578139-ZKe5T2gf8Zrp6N44MAufw6i1K6AmC4BJIVb9TdcTO",
+    "ACCESS_SECRET": "8DfvUBNYlq6avuTyGOJvHYO94r8RO81eIHFFgp4H5kQGL"
+    }
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 

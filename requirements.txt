@@ -1,4 +1,5 @@
 django
-gunicorn
+pillow
 django-heroku
 twython
+twython-django
