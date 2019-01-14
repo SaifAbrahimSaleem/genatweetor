@@ -27,7 +27,7 @@ CALLBACK_URL = 'https://genatweetor.herokuapp.com/dashboard'
 # def authenticateConnection(request, user):
 #     OAUTH_TOKEN = settings.auth['oauth_token']
 #     OAUTH_TOKEN_SECRET = settings.auth['oauth_token_secret']
-#     authorisedURL = settings.auth['auth_url']
+#     authorisedURL = settings.auth['auth_url'] 
 #       redirect(authorisedURL)
 ########## HANDLING CALLBACK ##########
 #     oauth_verifier = request.GET['oauth_verifier']
