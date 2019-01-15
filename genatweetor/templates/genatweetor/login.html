@@ -9,6 +9,7 @@
   <body>
     {% block body-content %}
       <form action="{% url 'genatweetor:login' %}" method="post" class="loginForm">
+        {% csrf_token %}
         Username:<br>
         <input type="text" name="username" placeholder="Enter Username" class="usernameInput">
         <br>
