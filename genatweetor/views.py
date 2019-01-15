@@ -27,7 +27,7 @@ CALLBACK_URL = 'https://genatweetor.herokuapp.com/dashboard'
 # def authenticateConnection(request, user):
 #     OAUTH_TOKEN = settings.auth['oauth_token']
 #     OAUTH_TOKEN_SECRET = settings.auth['oauth_token_secret']
-#     authorisedURL = settings.auth['auth_url'] 
+#     authorisedURL = settings.auth['auth_url']
 #       redirect(authorisedURL)
 ########## HANDLING CALLBACK ##########
 #     oauth_verifier = request.GET['oauth_verifier']
@@ -45,14 +45,43 @@ def index(request):
 
 def login(request):
     twitter = Twython(settings.credentials['CONSUMER_KEY'],settings.credentials['CONSUMER_SECRET'])
-    auth = twitter.get_authentication_tokens(callback_url=CALLBACK_URL)
-    context = {
-        'responseMessage' : "Successfully Logged in!"
-    }
-    return render(request, 'genatweetor/login.html', context)
+    #callback url
+    auth = twitter.get_authentication_tokens(callback_url=settings.CALLBACK_URL)
+    #save oauth tokens into a session variable (a temporary method of storing the oauth variables)
+    session['oauth_token'] = auth['oauth_token']
+    session['oauth_token_secret'] = auth['oauth_token_secret']
+    #Redirect the user to the url obtained by twitter
+    redirect_url = auth['auth_url']
+    # context = {
+    #     'responseMessage' : "Successfully Logged in!"
+    # }
+    return redirect(redirect_url)
 
 def dashboard(request):
-    context = {
-        'responseMessage' : "Successfully Logged in!"
-    }
-    return HttpResponse(request, 'genatweetor/dashboard.html', context)
+     # if user denied authorization
+    is_denied = request.values.get('denied')
+    if is_denied:
+        return "USER DENIED"
+
+    oauth_verifier = request.values.get('oauth_verifier')
+    if not oauth_verifier:
+        abort(401, 'missing oauth_verifier')
+
+    twitter = Twython(settings.credentials['CONSUMER_KEY'], settings.credentials['CONSUMER_SECRET'],
+                      session['oauth_token'], session['oauth_token_secret'])
+
+    final_step = twitter.get_authorized_tokens(oauth_verifier)
+
+    # store these permanently in database
+    OAUTH_TOKEN = final_step['oauth_token']
+    OAUTH_TOKEN_SECRET = final_step['oauth_token_secret']
+
+    # get user credential
+    twitter = Twython(settings.credentials['CONSUMER_KEY'], settings.credentials['CONSUMER_SECRET'],
+                       OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+                       
+    # https://developer.twitter.com/en/docs/accounts-and-users/manage-account-settings/api-reference/get-account-verify_credentials
+    data = twitter.verify_credentials()
+    user_id = data['id_str']
+    name = data['name']
+    username = data['screen_name']
