@@ -4,3 +4,4 @@ pillow
 django-heroku
 twython
 twython-django
+psycopg2-binary
