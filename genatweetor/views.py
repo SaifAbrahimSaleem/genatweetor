@@ -79,9 +79,15 @@ def dashboard(request):
     # get user credential
     twitter = Twython(settings.credentials['CONSUMER_KEY'], settings.credentials['CONSUMER_SECRET'],
                        OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-                       
+
     # https://developer.twitter.com/en/docs/accounts-and-users/manage-account-settings/api-reference/get-account-verify_credentials
     data = twitter.verify_credentials()
     user_id = data['id_str']
     name = data['name']
     username = data['screen_name']
+
+    context = {
+        'responseMessage' : "Successfully Logged in!"
+    }
+    
+    return render(request, 'genatweetor/dashboard.html', context)
