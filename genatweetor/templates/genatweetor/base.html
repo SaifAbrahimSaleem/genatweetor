@@ -3,8 +3,12 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <!--ADDING BOOTSTRAP TO THE BASE FOR ALL PAGES TO UTILISE LATER-->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+    <!--ADDING BOOTSTRAP CSS TO THE BASE FOR ALL PAGES TO UTILISE LATER-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <!--ADDING JQUERY TO THE BASE FOR ALL PAGES TO UTILISE LATER-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--ADDING JAVASCRIPT TO THE BASE FOR ALL PAGES TO UTILISE LATER-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     {% block headertags %}
     {% endblock %}
     <title>Genatweetor: generate personalised tweets!</title>
@@ -12,7 +16,7 @@
   <body>
     {% if responseMessage %}
       <p>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
