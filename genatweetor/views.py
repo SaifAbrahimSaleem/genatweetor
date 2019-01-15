@@ -34,10 +34,10 @@ def dashboard(request):
     is_denied = request.session.get('denied')
     if is_denied:
         return HttpResponse("USER DENIED")
-
-    oauth_verifier = request.session.get('oauth_verifier')
-    if not oauth_verifier:
+    if not 'oauth_verifier' in request.session:
         raise Http404('missing oauth_verifier')
+    oauth_verifier = request.session.get('oauth_verifier')
+
 
     twitter = Twython(settings.CONSUMER_KEY, settings.CONSUMER_SECRET,
                       request.session['oauth_token'], request.session['oauth_token_secret'])
