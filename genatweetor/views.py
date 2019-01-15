@@ -31,10 +31,10 @@ def login(request):
 
 def dashboard(request):
      # if user denied authorization
-    is_denied = request.values.get('denied')
+    is_denied = request.session['denied']
     if is_denied:
         return HttpResponse("USER DENIED")
-    oauth_verifier = request.values.get('oauth_verifier')
+    oauth_verifier = request.session['oauth_verifier']
     if not oauth_verifier:
         raise Http404('missing oauth_verifier')
 
