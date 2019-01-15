@@ -4,20 +4,28 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <link rel="stylesheet" href="{% static 'genatweetor/stylesheets/login.css'%}">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:600'>
   </head>
   <body>
     {% block body-content %}
-      <form action="{% url 'genatweetor:login' %}" method="post" class="loginForm">
         {% csrf_token %}
-        Username:<br>
-        <input type="text" name="username" placeholder="Enter Username" class="usernameInput">
-        <br>
-        Password:<br>
-        <input type="text" name="password" placeholder="Enter Password" class="passwordInput">
-        <br><br>
-        <input type="submit" value="Login" class="loginBtn">
-      </form>
+        <div class="login">
+          <div class="heading">
+            <h2>Sign in</h2>
+            <form action="{% url 'genatweetor:login' %}" method="post" class="loginForm">
+              <div class="input-group input-group-lg">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input type="text" class="form-control" placeholder="Twitter Username">
+              </div>
+              <div class="input-group input-group-lg">
+                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                <input type="password" class="form-control" placeholder="Twitter Password">
+              </div>
+              <button type="submit" class="float">Login</button>
+            </form>
+ 		       </div>
+         </div>
     {% endblock %}
   </body>
 </html>
