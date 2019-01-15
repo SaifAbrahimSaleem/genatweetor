@@ -48,8 +48,8 @@ def login(request):
     #callback url
     auth = twitter.get_authentication_tokens(callback_url=settings.CALLBACK_URL)
     #save oauth tokens into a session variable (a temporary method of storing the oauth variables)
-    session['oauth_token'] = auth['oauth_token']
-    session['oauth_token_secret'] = auth['oauth_token_secret']
+    request.session['oauth_token'] = auth['oauth_token']
+    request.session['oauth_token_secret'] = auth['oauth_token_secret']
     #Redirect the user to the url obtained by twitter
     redirect_url = auth['auth_url']
     # context = {
@@ -59,16 +59,16 @@ def login(request):
 
 def dashboard(request):
      # if user denied authorization
-    is_denied = request.values.get('denied')
+    is_denied = request.session.get('denied')
     if is_denied:
-        return "USER DENIED"
+        return HttpResponse("USER DENIED")
 
-    oauth_verifier = request.values.get('oauth_verifier')
+    oauth_verifier = request.session.get('oauth_verifier')
     if not oauth_verifier:
         abort(401, 'missing oauth_verifier')
 
     twitter = Twython(settings.credentials['CONSUMER_KEY'], settings.credentials['CONSUMER_SECRET'],
-                      session['oauth_token'], session['oauth_token_secret'])
+                      request.session['oauth_token'], request.session['oauth_token_secret'])
 
     final_step = twitter.get_authorized_tokens(oauth_verifier)
 
@@ -89,5 +89,5 @@ def dashboard(request):
     context = {
         'responseMessage' : "Successfully Logged in!"
     }
-    
+
     return render(request, 'genatweetor/dashboard.html', context)
