@@ -52,6 +52,7 @@ def login(request):
     request.session['oauth_token_secret'] = auth['oauth_token_secret']
     #Redirect the user to the url obtained by twitter
     redirect_url = auth['auth_url']
+    print(redirect_url)
     # context = {
     #     'responseMessage' : "Successfully Logged in!"
     # }
