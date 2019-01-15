@@ -31,8 +31,7 @@ def login(request):
 
 def dashboard(request):
      # if user denied authorization
-    is_denied = request.session['denied']
-    if is_denied:
+    if 'denied' in request.session:
         return HttpResponse("USER DENIED")
     oauth_verifier = request.session['oauth_verifier']
     if not oauth_verifier:
