@@ -7,7 +7,7 @@ import json
 
 appname = 'genatweetor'
 #NEEDS TO BE LOCAL HOST
-CALLBACK_URL = 'https://genatweetor.herokuapp.com/dashboard'
+#CALLBACK_URL = 'https://genatweetor.herokuapp.com/dashboard'
 
 # LOGGED IN DECORATOR FOR THE PROGRAM
 # def is_loggedIn(view):
@@ -46,7 +46,7 @@ def index(request):
 def login(request):
     twitter = Twython(settings.credentials['CONSUMER_KEY'],settings.credentials['CONSUMER_SECRET'])
     #callback url
-    auth = twitter.get_authentication_tokens(callback_url=CALLBACK_URL)
+    auth = twitter.get_authentication_tokens(callback_url='https://genatweetor.herokuapp.com/dashboard')
     #save oauth tokens into a session variable (a temporary method of storing the oauth variables)
     request.session['oauth_token'] = auth['oauth_token']
     request.session['oauth_token_secret'] = auth['oauth_token_secret']
