@@ -44,7 +44,7 @@ def index(request):
     return render(request, 'genatweetor/login.html', context)
 
 def login(request):
-    twitter = Twython(settings.credentials['CONSUMER_KEY'],settings.credentials['CONSUMER_SECRET'])
+    twitter = Twython(settings.CONSUMER_KEY , settings.CONSUMER_SECRET)
     #callback url
     auth = twitter.get_authentication_tokens(callback_url='https://genatweetor.herokuapp.com/dashboard')
     #save oauth tokens into a session variable (a temporary method of storing the oauth variables)
@@ -68,7 +68,7 @@ def dashboard(request):
     if not oauth_verifier:
         abort(401, 'missing oauth_verifier')
 
-    twitter = Twython(settings.credentials['CONSUMER_KEY'], settings.credentials['CONSUMER_SECRET'],
+    twitter = Twython(settings.CONSUMER_KEY, settings.CONSUMER_SECRET,
                       request.session['oauth_token'], request.session['oauth_token_secret'])
 
     final_step = twitter.get_authorized_tokens(oauth_verifier)
@@ -78,7 +78,7 @@ def dashboard(request):
     OAUTH_TOKEN_SECRET = final_step['oauth_token_secret']
 
     # get user credential
-    twitter = Twython(settings.credentials['CONSUMER_KEY'], settings.credentials['CONSUMER_SECRET'],
+    twitter = Twython(settings.CONSUMER_KEY, settings.CONSUMER_SECRET,
                        OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
     # https://developer.twitter.com/en/docs/accounts-and-users/manage-account-settings/api-reference/get-account-verify_credentials
