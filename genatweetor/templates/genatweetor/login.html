@@ -4,16 +4,16 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="{% static 'genatweetor/stylesheets/login.css'%}">
+    <link rel="stylesheet" href="{% static 'stylesheets/login.css'%}">
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:600'>
   </head>
   <body>
     {% block body-content %}
-        {% csrf_token %}
         <div class="login">
           <div class="heading">
             <h2>Sign in</h2>
             <form action="{% url 'genatweetor:login' %}" method="post" class="loginForm">
+              {% csrf_token %}
               <div class="input-group input-group-lg">
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
                 <input type="text" class="form-control" placeholder="Twitter Username">
