@@ -13,3 +13,7 @@ VERIFYING THE USER'S CREDENTIALS:
  MIGHT NEED TO UNINSTALL twython-django
 
  https://stackabuse.com/accessing-the-twitter-api-with-python/
+
+/* background: url(https://dl.dropboxusercontent.com/u/159328383/background.jpg) no-repeat center center fixed; */
+
+@import "bourbon";
