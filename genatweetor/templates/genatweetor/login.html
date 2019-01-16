@@ -4,8 +4,10 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="{% static 'stylesheets/login.css'%}">
+    {% block headertags %}
+    <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/login.css'%}">
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:600'>
+    {% endblock %}
   </head>
   <body>
     {% block body-content %}
