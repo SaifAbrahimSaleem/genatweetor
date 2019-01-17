@@ -4,10 +4,15 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    {% block headertags %}
+    <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/dashboard.css'%}">
+    {% endblock %}
+    <title>Genatweetor: Dashboard</title>
   </head>
   <body>
     {% block body-content %}
+      {{ name }}
+      {{ username }}
     {% endblock %}
   </body>
 </html>
