@@ -55,7 +55,7 @@ def dashboard(request):
 
     context = {
         'name' : name,
-        'user':username,
+        'user': username,
         'responseMessage' : "Successfully Logged in!"
     }
 
