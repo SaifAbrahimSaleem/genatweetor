@@ -9,11 +9,11 @@ from datetime import date
 #       RECOMMENDED TWEETS
 #       TIMELINE
 class User(User):
-    name = models.CharField(max_length=100, blank=True)
     dob = models.DateTimeField('Date of Birth')
     profileImage = models.ImageField(upload_to='profileImages') #profile_image_url or profile_image_url_https
-    tweetCount = models.IntegerField() #statuses_count
-    followerCount = models.IntegerField() #followers_count
+    tweetCount = models.IntegerField(blank=True) #statuses_count
+    followerCount = models.IntegerField(blank=True) #followers_count
+    accountDescription = models.CharField(max_length=300)
     ########## USER MODEL ALREADY HAS USERNAME, PASSWORD AND EMAIL ##########
     #return username/name
     def __str__(self):
@@ -23,7 +23,7 @@ class User(User):
         today = date.today
         return today.year - self.dob.year - ((today.month, today.day) < (self.dob.month, self.dob.day))
 
-    def getFollowrtCount(self):
+    def getFollowerCount(self):
         return self.followerCount
 
     def getTweetCount(self):
