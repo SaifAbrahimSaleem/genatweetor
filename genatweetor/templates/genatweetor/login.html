@@ -10,25 +10,21 @@
     {% endblock %}
   </head>
   <body>
-    {% block banner %}
-    <div class ="jumbotron" style="background-color: rgba(53, 180, 255, 0.7);">
-      <div class="logo">
-        <img src="{% static 'backgroundImages/Genatweetor_Logo.png' %}">
-      </div>
-    </div>
-    {% endblock %}
     {% block body-content %}
+    <div class="logo">
+      <img src="{% static 'backgroundImages/Genatweetor_Logo.png' %}">
+    </div>
         <div class="login">
           <div class="heading">
-            <h2>Sign in</h2>
+            <h2 style="text-align:center;">Login</h2>
             <form action="{% url 'genatweetor:login' %}" method="post" class="loginForm">
               {% csrf_token %}
-              <div class="input-group input-group-lg">
+              <div id="input" class="input-group input-group-lg">
                 <span class="input-group-addon" style="width:10%;"><i class="fa fa-user"></i></span>
                 <input type="text" class="form-control" name="form-username" placeholder="Username" style="height:100%">
               </div>
               <br>
-              <div class="input-group input-group-lg">
+              <div id="input" class="input-group input-group-lg">
                 <span class="input-group-addon" style="width:10%;"><i class="fa fa-lock"></i></span>
                 <input type="password" class="form-control" name="form-password" placeholder="Password" style="height:100%">
               </div>
@@ -36,6 +32,13 @@
               <button type="submit" class="float">Login</button>
             </form>
  		       </div>
+           <p>
+             <a href="{% url 'genatweetor:registerUser' %}">
+               <strong>
+                 Haven't Got an Account? Register Here!
+               </strong>
+             </a>
+           </p>
          </div>
 
     {% endblock %}

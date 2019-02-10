@@ -104,7 +104,7 @@ def dashboard(request):
     OAUTH_TOKEN = final_step['oauth_token']
     OAUTH_TOKEN_SECRET = final_step['oauth_token_secret']
 
-    # get user credential
+    # get user credentials
     twitter = Twython(settings.CONSUMER_KEY, settings.CONSUMER_SECRET,
                        OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
