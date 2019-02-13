@@ -84,7 +84,7 @@ def registerUser(request):
             return render(request, 'genatweetor/register.html', response)
     else:
         response = {
-            'responseMessage' : "Please fill in all fields!"
+            'responseMessage' : "Please fill in all fields to Register!"
         }
         return render(request, 'genatweetor/registerUser.html', response)
 #dashboard view

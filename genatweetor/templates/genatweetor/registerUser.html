@@ -1,11 +1,21 @@
 <!DOCTYPE html>
+{% extends 'genatweetor/base.html' %}
 {% load static %}
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    {% block headertags %}
+    <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/register.css'%}">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:600'>
+    {% endblock %}
   </head>
   <body>
-    <img src="{% static 'backgroundImages/Genatweetor_Logo.png' %}">
+    {% block body-content %}
+
+      <div class="logo">
+        <img src="{% static 'backgroundImages/Genatweetor_Logo.png' %}">
+      </div>
+
+    {% endblock %}
   </body>
 </html>
