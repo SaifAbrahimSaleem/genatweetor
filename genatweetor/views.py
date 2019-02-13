@@ -86,7 +86,7 @@ def registerUser(request):
         response = {
             'responseMessage' : "Please fill in all fields!"
         }
-        return render(request, 'genatweetor/register.html', response)
+        return render(request, 'genatweetor/registerUser.html', response)
 #dashboard view
 @is_loggedin
 def dashboard(request):

@@ -22,9 +22,28 @@ html {
 body, input, button {
   font-family: 'Source Sans Pro', sans-serif;
 }
+body{
+  opacity: 0;
+  transition: opacity .5s;
+}
+
+span {
+     cursor:pointer;
+     color:#0064ff;
+     text-decoration:underline;
+}
+span:hover {
+     text-decoration:none;
+     text-shadow: 1px 1px 1px #555;
+}
 
 body{
-  background-image: url("/static/backgroundImages/background4.png");
+  background-image:
+  linear-gradient(
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.6)
+  ),
+  url("/static/backgroundImages/background4.png");
 }
 
 p{

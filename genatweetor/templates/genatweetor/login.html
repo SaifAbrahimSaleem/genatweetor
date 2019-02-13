@@ -11,9 +11,11 @@
   </head>
   <body>
     {% block body-content %}
-    <div class="logo">
-      <img src="{% static 'backgroundImages/Genatweetor_Logo.png' %}">
-    </div>
+
+      <div class="logo">
+        <img src="{% static 'backgroundImages/Genatweetor_Logo.png' %}">
+      </div>
+
         <div class="login">
           <div class="heading">
             <h2 style="text-align:center;">Login</h2>
@@ -33,14 +35,25 @@
             </form>
  		       </div>
            <p>
-             <a href="{% url 'genatweetor:registerUser' %}">
+             <span onclick="transitionToPage('{% url 'genatweetor:registerUser' %}')">
                <strong>
                  Haven't Got an Account? Register Here!
                </strong>
-             </a>
+             </span>
            </p>
          </div>
+         <script>
+          window.transitionToPage = function(href) {
+            document.querySelector('body').style.opacity = 0
+            setTimeout(function() {
+              window.location.href = href
+             }, 500)
+           }
 
+           document.addEventListener('DOMContentLoaded', function(event) {
+             document.querySelector('body').style.opacity = 1
+           })
+         </script>
     {% endblock %}
   </body>
 </html>
