@@ -3,19 +3,210 @@
 {% load static %}
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8">
     {% block headertags %}
+    <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/register.css'%}">
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:600'>
     {% endblock %}
   </head>
   <body>
     {% block body-content %}
-
       <div class="logo">
         <img src="{% static 'backgroundImages/Genatweetor_Logo.png' %}">
       </div>
+      <div class="register-form">
+        <div class="form-row">
+          <div class="form-col">
+            <!--NAVIGATION-->
+            <div class="nav">
 
+            <section class="container-fluid" style="width:300px">
+                <div class="nav-row row justify-content-center">
+                  <button class="aboutYou btn btn-lg row justify-content-center">
+                    <div class="nav-circle1 col-xs-6 align-self-center d-block"></div>
+                    <div id="aboutYou" class="nav-item2 container-fluid col-xs-6 align-self-center d-block"><h4>About You</h4></div>
+                  </button>
+                </div>
+
+                <div class="nav-row row justify-content-center">
+                  <button class="yourAccount btn row justify-content-center">
+                    <div class="nav-circle2 col-xs-6 align-self-center d-block"></div>
+                    <div class="nav-item2 container-fluid col-xs-6 align-self-center d-block"><h4>Your Account</h4></div>
+                  </button>
+                </div>
+
+
+                <div class="nav-row row justify-content-center">
+                  <button class="security btn row justify-content-center">
+                    <div class="nav-circle3 col-xs-6 align-self-center d-block"></div>
+                    <div class="nav-item2 container-fluid col-xs-6 align-self-center d-block"><h4>Security</h4></div>
+                  </button>
+                </div>
+            </section>
+
+            </div>
+          </div>
+          <div class="form-col">
+            <div class="form-holder">
+              <section>
+
+                <fieldset>
+                  <legend>
+                    <h3 class="heading">About you</h3>
+                    <p style="font-size:0.65em; font-style:italic;">Allow us to get to know you by filling in this section!</p>
+                  </legend>
+                </fieldset>
+
+                <form class="registerForm" action="{% url 'genatweetor:registerUser' %}" method="post">
+                  {% csrf_token %}
+
+                  <div class="form-panel" id=panel1>
+
+                    <div class="form-group row col-xs-20">
+                      <label for="firstName" class="form-label col-sm-4 col-form-label">First Name</label>
+                      <input type="text" class="form-control column d-block" id="firstName" name="firstName" placeholder="Enter First Name" required>
+                    </div>
+
+                    <div class="form-group row col-xs-20">
+                      <label for="lastName" class="form-label col-sm-4 col-form-label">Last Name</label>
+                      <input type="text" class="form-control column d-block" id="lastName" name="lastName" placeholder="Enter Last Name" required>
+                    </div>
+
+                    <div class="form-group row col-xs-20">
+                      <label for="email" class="form-label col-sm-4 col-form-label">Email</label>
+                      <input type="email" class="form-control column d-block" id="email" name="email" placeholder="e.g. johnsmith1892@example.com" required>
+                    </div>
+
+                    <div class="form-group row col-xs-20">
+                      <label for="dateofbirth" class="form-label col-sm-4 col-form-label">Date Of Birth:</label>
+                      <input type="date"  class="form-control column d-block" name="dateofbirth" id="dateofbirth" required>
+                    </div>
+
+                    <button class="form-button btn btn-success btn-lg" type="button" id="next1">Next</button>
+                  </div>
+
+
+
+                  <div class="form-panel" id="panel2">
+
+                    <div class="form-group row col-xs-20">
+                      <label for="username" class="form-label col-sm-4 col-form-label">Username</label>
+                      <input type="text" class="form-control column d-block" id="username" name="username" placeholder="Enter a Username" required>
+                    </div>
+
+                    <div class="form-group row col-xs-20">
+                      <label for="password" class="form-label col-sm-4 col-form-label">Password</label>
+                      <input type="password" class="form-control column d-block" id="password" name="password" placeholder="Enter Password" required>
+                    </div>
+
+                    <div class="form-group row col-xs-20">
+                      <label for="confirm-password" class="form-label col-sm-4 col-form-label">Confirm Password</label>
+                      <input type="password" class="form-control column d-block" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+                    </div>
+
+                    <button class="form-button btn btn-success btn-lg" type="button" id="next2">Next</button>
+                  </div>
+
+
+                  <div class="form-panel" id="panel3">
+                      <button class="submit form-button btn btn-success btn-lg" type="submit" id="submit">Submit</button>
+                  </div>
+                </form>
+
+              </section>
+          </div>
+        </div>
+      </div>
+      <script>
+      $(document).ready(function(){
+        $("#panel2").hide();
+        $("#panel3").hide();
+
+        function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+              }
+            }
+          }
+          return cookieValue;
+        }
+
+        $('.aboutYou').on('click', function(){
+          $("#panel1").show();
+          $("#panel2").hide();
+          $("#panel3").hide();
+        })
+
+        $('.yourAccount').on('click', function(){
+          $("#panel1").hide();
+          $("#panel2").show();
+          $("#panel3").hide();
+        })
+
+        $('.security').on('click', function(){
+          $("#panel1").hide();
+          $("#panel2").hide();
+          $("#panel3").show();
+        })
+
+        $('#next1').on('click', function(){
+          $("#panel1").hide();
+          $("#panel2").show();
+          $("#panel3").hide();
+        })
+
+        $('#next2').on('click', function(){
+          $("#panel1").hide();
+          $("#panel2").hide();
+          $("#panel3").show();
+        })
+
+        $('.submit').on('click', function(e){
+          e.preventDefault();
+          var firstname = $('#firstName').val();
+          var lastname = $('#lastName').val();
+          var email = $('#email').val();
+          var dob = $('#dateofbirth').val();
+
+          var csrftoken = getCookie('csrftoken');
+          var username = $('#username').val();
+          var password = $('#password').val();
+          var confirmPassword = $('#confirm-password').val();
+
+            console.log("entered ajax request");
+            $.ajax({//
+              type: 'POST',
+              url: '{% url "genatweetor:registerUser" %}',
+              data:{
+                csrfmiddlewaretoken:csrftoken,
+                firstName:firstname,
+                lastName:lastname,
+                email:email,
+                dob:dob,
+                username:username,
+                password:password,
+              },
+              error: function(e){
+                console.log("500 internal server error for some reason. Check Console");
+              },
+            })//
+
+
+        })
+
+
+
+      });//End document ready function
+
+
+      </script>
     {% endblock %}
   </body>
 </html>

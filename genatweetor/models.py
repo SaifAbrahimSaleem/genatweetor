@@ -9,11 +9,11 @@ from datetime import date
 #       RECOMMENDED TWEETS
 #       TIMELINE
 class User(User):
-    dob = models.DateTimeField('Date of Birth')
-    profileImage = models.ImageField(upload_to='profileImages') #profile_image_url or profile_image_url_https
+    dob = models.DateTimeField(auto_now=True)
+    profileImage = models.ImageField(upload_to='profileImages', blank=True) #profile_image_url or profile_image_url_https
     tweetCount = models.IntegerField(blank=True) #statuses_count
     followerCount = models.IntegerField(blank=True) #followers_count
-    accountDescription = models.CharField(max_length=300)
+    accountDescription = models.CharField(max_length=300, blank=True)
     ########## USER MODEL ALREADY HAS USERNAME, PASSWORD AND EMAIL ##########
     #return username/name
     def __str__(self):
@@ -48,3 +48,5 @@ class Tweet(models.Model):
 
     def getDateTweeted(self):
         return self.tweetDate
+
+#class GeneratedTweet(models.Model):
