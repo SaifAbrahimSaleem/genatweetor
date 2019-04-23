@@ -1,11 +1,23 @@
 from django.urls import path
+from django.conf.urls import url
 from . import views
 
 app_name='genatweetor'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('login/', views.login, name='login'),
-    path('dashboard/',views.dashboard, name='dashboard'),
-    path('registerUser/', views.registerUser, name='registerUser'),
+    path(r'login/', views.login, name='login'),
+    path(r'register/', views.register, name='register'),
+    path(r'dashboard/',views.dashboard, name='dashboard'),
+    path(r'settings/',views.setting, name='settings'),
+    path(r'profile/',views.profile, name='profile'),
+    path(r'profile/getTwitterProfile/',views.getTwitterProfile, name='getTwitterProfile'),
+    path(r'profile/getDjangoProfile/',views.getDjangoProfile, name='getDjangoProfile'),
+    path(r'profile/editUserProfile/',views.editUserProfile, name='editProfile'),
+    path(r'tweetsArchive/',views.tweetsArchive, name='tweetsArchive'),
+    path(r'tweetsArchive/getTweets/',views.getTweets, name='getTweets'),
+    path(r'tweetsArchive/updateTimeline/',views.updateTimeline, name='updateTimeline'),
+    path(r'tweetsArchive/deleteTweet/<int:id>/', views.deleteTweet, name='deleteTweet'),
+    path(r'statistics/',views.statistics, name='statistics'),
+    path(r'generateTweet/',views.generateTweet, name='generateTweet'),
 ]

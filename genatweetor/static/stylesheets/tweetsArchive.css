@@ -4,6 +4,7 @@
 
 html{
   min-height:100%;
+  width:auto;
   position:relative;
 }
 
@@ -11,6 +12,7 @@ body{
   height:100%;
   width:100%;
   background-color: rgb(204, 206, 209);
+  overflow-x:hidden;
 }
 
 .logo{
@@ -31,11 +33,13 @@ body{
   font-size: 1.2em;
 }
 
+#sidebar-wrapper{
+  position: fixed;
+}
+
 .side-nav{
   min-width:200px;
-  padding-left: 0px;
-  margin-left: 0px;
-  position: absolute;
+  position: fixed;
   top:0;
   bottom:0;
   left:0;
@@ -54,6 +58,12 @@ body{
   padding:1px;
 }
 
+.home{
+  flex:1;
+  text-align: center;
+  padding:1px;
+}
+
 .profile{
   flex:1;
   text-align: center;
@@ -62,7 +72,6 @@ body{
 
 .sidebar-container{
   padding-top: 20%;
-  margin-left:0px;
   margin-right:10px;
   padding-right:6%;
   vertical-align: middle;
@@ -88,38 +97,79 @@ body{
   vertical-align:middle;
   text-align: center;
 }
+
 .mainapp{
   position:absolute;
-  margin: auto 30%;
+  margin: 5% 25%;
+  width:80%;
+  overflow-x: hidden;
+  display:block;
+}
+
+.timeline-card{
+  width:80%;
+  height:auto;
+  display:block;
+}
+
+.titleCard{
+  margin-left:2%;
+}
+
+.titleCard p{
+    text-indent: 1%;
+}
+
+.updateCard{
+  align-items:center;
+}
+
+.updateCard input{
+  padding:1%;
+}
+
+.updateBtn{
+  float: right;
+}
+
+.tweets{
+  margin-top:10px;
+  max-width:80%;
+  height:50%;
+  display:flex;
+}
+
+.tweetCard{
+  margin-top: 1%;
+  min-height:300px;
+  flex:1;
+}
+
+.tweetCard:hover{
+  background-color: rgb(201, 211, 226);
+}
+
+.tweetCardBody{
+  min-height: 100px;
+}
+
+.tweetMessageCard{
   width:100%;
-  overflow: hidden;
-  display:block;
+  height:500px;
 }
 
-.profile-card{
-  padding:10%;
-  width:40%;
-  height:auto;
-  display:block;
+.tweetMessageCardBody{
+  display:table;
+  width:100%;
+  height:500px;
 }
 
-.overallMood-card{
-  margin-left: 50px;
-  padding:10%;
-  width:40%;
-  height:auto;
-  display:block;
+.tweetMessageCardBody .text{
+  display:table-cell;
+  text-align: center;
+  vertical-align: middle;
 }
 
-.card-row2{
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.statistics-card{
-
-  padding:5%;
-  width:84%;
-  height:auto;
-  display:block;
+.viewTweet{
+  text-align:center;
 }

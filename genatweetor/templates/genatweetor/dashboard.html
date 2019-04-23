@@ -1,21 +1,56 @@
 <!DOCTYPE html>
-{% extends 'genatweetor/base.html' %}
+{% extends 'genatweetor/loggedInBase.html' %}
 {% load static %}
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     {% block headertags %}
-    <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/dashboard.css'%}">
+      <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/dashboard.css'%}">
+      <title>Genatweetor: Dashboard</title>
     {% endblock %}
-    <title>Genatweetor: Dashboard</title>
   </head>
   <body>
     {% block body-content %}
-      <!--{{ name }}
-      Needs a sidebar to navigate
-      {{ user }}-->
-    <p>hello world!</p>
+        <!-- MAINAPP -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <div class="mainapp">
+            <div class="card-row row card-row2 row col-lg-10">
+              <div class="profile-card card column">
+                <div class="card-body">
+                  <h4 class="card-title"> <strong> Your Profile </strong> </h4>
+                  <ul class="list-group list-group-flush">
+                    <li class="card-text list-group-item">Username: {{ user }}</li>
+                    <li class="card-text list-group-item">Name: {{ name }}</li>
+                    <li class="card-text list-group-item">Email: {{ email }}</li>
+                    <li class="card-text list-group-item">Age: {{ age }}</li>
+                    <li class="card-text list-group-item">Date Of Birth: {{ dob }}</li>
+                    <li class="card-text list-group-item">Screen Name: {{ screen_name }}</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="overallMood-card card column">
+                <img class="card-img-top" src="{% static 'profileImages/smile.jpg' %}" alt="Card image cap">
+                <div class="card-body">
+                  <h3 class="card-title">Your Overall Mood</h3>
+                  <p class="card-text">You are: (Insert Mood)</p>
+                </div>
+              </div>
+            </div>
+            <div class="card-row2 row col-lg-10">
+              <div class="statistics-card card column">
+                <div class="card-body">
+                  <h3 class="card-title">Average Engagement (Past 7-days)</h3>
+                  <p class="card-text">Include Graph from django rest-pandas</p>
+                </div>
+              </div>
+            </div>
 
+          </div>
+
+        </main>
+
+    {% endblock %}
+    {% block script-tags %}
     {% endblock %}
   </body>
 </html>

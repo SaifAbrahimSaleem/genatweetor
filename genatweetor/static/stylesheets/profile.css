@@ -2,6 +2,11 @@
 @import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css);
 @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css);
 
+$shadow-color: #23203b;
+$input-color: lighten(#AB9E95, 10%);
+$input-border-color: #5E5165;
+$button-background-color: #27AE60;
+
 html{
   min-height:100%;
   position:relative;
@@ -12,6 +17,11 @@ body{
   width:100%;
   background-color: rgb(204, 206, 209);
 }
+
+.jumbotron{
+  position:fixed;
+}
+
 
 .logo{
   width:80%;
@@ -31,11 +41,13 @@ body{
   font-size: 1.2em;
 }
 
+#sidebar-wrapper{
+  position: fixed;
+}
+
 .side-nav{
   min-width:200px;
-  padding-left: 0px;
-  margin-left: 0px;
-  position: absolute;
+  position: fixed;
   top:0;
   bottom:0;
   left:0;
@@ -49,6 +61,12 @@ body{
 }
 
 .settings{
+  flex:1;
+  text-align: center;
+  padding:1px;
+}
+
+.home{
   flex:1;
   text-align: center;
   padding:1px;
@@ -88,38 +106,34 @@ body{
   vertical-align:middle;
   text-align: center;
 }
+
 .mainapp{
   position:absolute;
-  margin: auto 30%;
-  width:100%;
-  overflow: hidden;
+  margin: 5% 25%;
+  width:80%;
+  overflow-x: hidden;
   display:block;
 }
 
 .profile-card{
-  padding:10%;
-  width:40%;
-  height:auto;
-  display:block;
+  width:80%;
+  height:80%;
+  display:flex;
+  border-radius: 10px;
 }
 
-.overallMood-card{
-  margin-left: 50px;
-  padding:10%;
-  width:40%;
-  height:auto;
+.appProfileCard{
+  text-indent:2%;
+  width:100%;
+  height:80%;
   display:block;
+  flex:1;
 }
 
-.card-row2{
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.statistics-card{
-
-  padding:5%;
-  width:84%;
-  height:auto;
+.twitterProfileCard{
+  text-indent:2%;
+  width:100%;
+  height:80%;
   display:block;
+  flex:1;
 }

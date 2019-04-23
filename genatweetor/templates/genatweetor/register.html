@@ -47,8 +47,6 @@
             </div>
           </div>
           <div class="form-col">
-            <div class="form-holder">
-              <section>
 
                 <fieldset>
                   <legend>
@@ -57,64 +55,66 @@
                   </legend>
                 </fieldset>
 
-                <form class="registerForm" action="{% url 'genatweetor:registerUser' %}" method="post">
+                <form enctype="multipart/form-data" class="registerForm" action="{% url 'genatweetor:register' %}" method="post">
                   {% csrf_token %}
 
-                  <div class="form-panel" id=panel1>
+                  <fieldset class="form-panel" id=panel1>
 
                     <div class="form-group row col-xs-20">
                       <label for="firstName" class="form-label col-sm-4 col-form-label">First Name</label>
-                      <input type="text" class="form-control column d-block" id="firstName" name="firstName" placeholder="Enter First Name" required>
+                      <input type="text" class="form-control column d-block" id="firstName" name="firstName" placeholder="Enter First Name">
                     </div>
 
                     <div class="form-group row col-xs-20">
                       <label for="lastName" class="form-label col-sm-4 col-form-label">Last Name</label>
-                      <input type="text" class="form-control column d-block" id="lastName" name="lastName" placeholder="Enter Last Name" required>
+                      <input type="text" class="form-control column d-block" id="lastName" name="lastName" placeholder="Enter Last Name">
                     </div>
 
                     <div class="form-group row col-xs-20">
                       <label for="email" class="form-label col-sm-4 col-form-label">Email</label>
-                      <input type="email" class="form-control column d-block" id="email" name="email" placeholder="e.g. johnsmith1892@example.com" required>
+                      <input type="email" class="form-control column d-block" id="email" name="email" placeholder="e.g. johnsmith1892@example.com">
                     </div>
 
                     <div class="form-group row col-xs-20">
                       <label for="dateofbirth" class="form-label col-sm-4 col-form-label">Date Of Birth:</label>
-                      <input type="date"  class="form-control column d-block" name="dateofbirth" id="dateofbirth" required>
+                      <input type="date"  class="form-control column d-block" name="dateofbirth" id="dateofbirth">
                     </div>
 
                     <button class="form-button btn btn-success btn-lg" type="button" id="next1">Next</button>
-                  </div>
+                  </fieldset>
 
+<!--ADD AJAX CALL FOR EDITPROFILE-->
 
-
-                  <div class="form-panel" id="panel2">
+                  <fieldset class="form-panel" id="panel2">
 
                     <div class="form-group row col-xs-20">
                       <label for="username" class="form-label col-sm-4 col-form-label">Username</label>
-                      <input type="text" class="form-control column d-block" id="username" name="username" placeholder="Enter a Username" required>
+                      <input type="text" class="form-control column d-block" id="username" name="username" placeholder="Enter a Username">
                     </div>
 
                     <div class="form-group row col-xs-20">
                       <label for="password" class="form-label col-sm-4 col-form-label">Password</label>
-                      <input type="password" class="form-control column d-block" id="password" name="password" placeholder="Enter Password" required>
+                      <input type="password" class="form-control column d-block" id="password" name="password" placeholder="Enter Password">
                     </div>
 
                     <div class="form-group row col-xs-20">
                       <label for="confirm-password" class="form-label col-sm-4 col-form-label">Confirm Password</label>
-                      <input type="password" class="form-control column d-block" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+                      <input type="password" class="form-control column d-block" id="confirm-password" name="confirm-password" placeholder="Confirm Password">
                     </div>
 
+                    <button class="form-button btn btn-danger btn-lg" type="button" id="back1">Back</button>
                     <button class="form-button btn btn-success btn-lg" type="button" id="next2">Next</button>
-                  </div>
+                  </fieldset>
 
 
-                  <div class="form-panel" id="panel3">
+                  <fieldset class="form-panel" id="panel3">
+                      <button class="form-button btn btn-danger btn-lg" type="button" id="back2">Back</button>
                       <button class="submit form-button btn btn-success btn-lg" type="submit" id="submit">Submit</button>
-                  </div>
+                  </fieldset>
                 </form>
 
-              </section>
-          </div>
+
+
         </div>
       </div>
       <script>
@@ -168,41 +168,17 @@
           $("#panel3").show();
         })
 
-        $('.submit').on('click', function(e){
-          e.preventDefault();
-          var firstname = $('#firstName').val();
-          var lastname = $('#lastName').val();
-          var email = $('#email').val();
-          var dob = $('#dateofbirth').val();
-
-          var csrftoken = getCookie('csrftoken');
-          var username = $('#username').val();
-          var password = $('#password').val();
-          var confirmPassword = $('#confirm-password').val();
-
-            console.log("entered ajax request");
-            $.ajax({//
-              type: 'POST',
-              url: '{% url "genatweetor:registerUser" %}',
-              data:{
-                csrfmiddlewaretoken:csrftoken,
-                firstName:firstname,
-                lastName:lastname,
-                email:email,
-                dob:dob,
-                username:username,
-                password:password,
-              },
-              error: function(e){
-                console.log("500 internal server error for some reason. Check Console");
-              },
-            })//
-
-
+        $('#back1').on('click', function(){
+          $("#panel1").show();
+          $("#panel2").hide();
+          $("#panel3").hide();
         })
 
-
-
+        $('#back2').on('click', function(){
+          $("#panel1").hide();
+          $("#panel2").show();
+          $("#panel3").hide();
+        })
       });//End document ready function
 
 

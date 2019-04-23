@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% extends 'genatweetor/loggedInBase.html' %}
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    {% block headertags%}
+      <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/statistics.css'%}">
+    {% endblock %}
+    <title></title>
+  </head>
+  <body>
+    {% block body-content %}
+      <p>Hello World! Statistics </p>
+    {% endblock %}
+  </body>
+</html>

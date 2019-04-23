@@ -22,10 +22,10 @@ TEMPLATES_DIR = (
     os.path.join(BASE_DIR, 'templates'),
 )
 #credentials = {
-CONSUMER_KEY="OKWYt7fT3rHd6VjA8HOoRVpGM"
-CONSUMER_SECRET="Wek3pFj602EOmufJzJzvgPpIaZjpol5U7PsTZhEGfZ9WFKstr0"
-ACCESS_TOKEN="49578139-ZKe5T2gf8Zrp6N44MAufw6i1K6AmC4BJIVb9TdcTO"
-ACCESS_SECRET= "8DfvUBNYlq6avuTyGOJvHYO94r8RO81eIHFFgp4H5kQGL"
+APP_KEY='OKWYt7fT3rHd6VjA8HOoRVpGM'
+APP_SECRET='Wek3pFj602EOmufJzJzvgPpIaZjpol5U7PsTZhEGfZ9WFKstr0'
+ACCESS_TOKEN="49578139-hOAZhsi6o4TlDuqwIQc5FJHz3byCNsEsbskCK6tDh"
+ACCESS_SECRET= "95idexegEPYioUTWH9qAql6pTJEowcFFjRStrre7xNc1l"
 #    }
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -132,8 +132,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/

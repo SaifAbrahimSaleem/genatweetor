@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:600'>
+    <!--FONTAWESOME FOR ICONS-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <!--ADDING BOOTSTRAP CSS TO THE BASE FOR ALL PAGES TO UTILISE LATER-->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/loggedInBase.css'%}">
+      {% block headertags %}
+    {% endblock %}
+    <title>Genatweetor: generate personalised tweets!</title>
+  </head>
+  <body>
+    {% if responseMessage %}
+      <div class="bannerAlert">
+        <div id="alert-area" class="alert alert-success alert-dismissible" role="alert"></div>
+      </div>
+    {% endif %}
+      <div class="dashboard row" id="sidebar-wrapper">
+        <nav class="side-nav col-md-2 d-none d-md-block sidebar clearfix">
+          <div class="sidebar-container sidebar-sticky">
+            <ul class="sidebar-sticky">
+              <div class="nav-container row">
+                <div class="profile nav-item">
+                  <a class="nav-link active" href="{% url 'genatweetor:profile' %}"><i class="fas fa-user"></i></a>
+                </div>
+                <div class="home nav-item">
+                  <a class="nav-link active" href="{% url 'genatweetor:dashboard' %}"><i class="fas fa-home"></i></a>
+                </div>
+              </div>
+
+              <div class="logo">
+                <img src="{% static 'backgroundImages/Genatweetor_Logo.png' %}">
+              </div>
+
+
+              <div class="nav-item-list">
+                <a class="nav-link active" href="{% url 'genatweetor:tweetsArchive' %}">Tweets Archive</a>
+              </div>
+              <div class="nav-item-list">
+                <a class="nav-link active" href="{% url 'genatweetor:statistics' %}">Statistics</a>
+              </div>
+              <div class="nav-item-list">
+                <a class="nav-link active" href="{% url 'genatweetor:generateTweet' %}">Generate Tweet</a>
+              </div>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    {% block body-content %}
+    {% endblock %}
+    <!--ADDING JQUERY TO THE BASE FOR ALL PAGES TO UTILISE LATER-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+      $(document).ready(function(){
+        newAlert('success', '<strong>{{ responseMessage }} {{ name }}!</strong>');
+        function newAlert (type, message) {
+          $("#alert-area").append($("<div class= 'alert-message " + type + " fade in' data-alert> " + message + " </div>"));
+          $("#alert-area").delay(3500).fadeOut("slow", function () { $(this).remove(); });
+        }
+        $(function() {
+
+            var $sidebar   = $(".side-nav"),
+                $window    = $(window),
+                offset     = $sidebar.offset(),
+                topPadding = 15;
+
+            $window.scroll(function() {
+                if ($window.scrollTop() < offset.top) {
+                    $sidebar.stop().animate({
+                        marginTop: $window.scrollTop() - offset.top + topPadding
+                    });
+                } else {
+                    $sidebar.stop().animate({
+                        marginTop: 0
+                    });
+                }
+            });
+
+        });
+      });
+    </script>
+    <!-- Popper.JS -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    {% block script-tags %}
+    {% endblock %}
+  </body>
+</html>

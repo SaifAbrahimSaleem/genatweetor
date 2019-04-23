@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+{% extends 'genatweetor/loggedInBase.html' %}
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    {% block headertags%}
+      <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/profile.css'%}">
+    {% endblock %}
+    <title></title>
+  </head>
+  <body>
+    {% block body-content %}
+    <main role="main" class="col-md-15 px-10">
+
+      <div class="container">
+        <div class="modal" id="editProfile">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <h4 class="modal-title">Edit Profile</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+
+                <br>
+                <p class="modal-subtitle"> </p>
+                <br>
+
+              <div class="modal-body">
+
+              <form enctype="multipart/form-data" class="editForm" action="{% url 'genatweetor:editProfile' %}" method="post">
+
+                <div class="form-group row">
+                  <label for="firstName" class="form-label col-sm-4 col-form-label">First Name</label>
+                  <input type="text" class="form-control column d-block" id="firstName" name="firstName" value="{{first_name}}">
+                </div>
+
+                <div class="form-group row col-xs-20">
+                  <label for="lastName" class="form-label col-sm-4 col-form-label">Last Name</label>
+                  <input type="text" class="form-control column d-block" id="lastName" name="lastName" value="{{last_name}}">
+                </div>
+
+                <div class="form-group row col-xs-20">
+                  <label for="email" class="form-label col-sm-4 col-form-label">Email</label>
+                  <input type="email" class="form-control column d-block" id="email" name="email" value="{{email}}">
+                </div>
+
+              </form>
+
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="submit" class="submitButton btn btn-success">Submit</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mainapp container-fluid">
+        <div class="profile-card card row">
+          <div class="appProfileCard card card-body column">
+            <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#editProfile">Edit</button>
+            <h3 class="card-title">Your Genatweetor Profile:</h3>
+            {% load static %}
+            <div class="appProfile card-body row">
+              <div class="profile-body card-body"></div>
+            </div>
+          </div>
+
+          <div class="twitterProfileCard card card-body column">
+            <div class="profile-image"></div>
+            <h3>Your Twitter Profile:</h3>
+            {% load static %}
+            <div class="twitterProfile card-body row"></div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+    {% endblock %}
+    {% block script-tags%}
+    <script>
+    $(window).on("load", function(){
+      $(document).ready(function(){
+        getTwitterProfile();
+        getDjangoProfile();
+        $(".submitButton").on("click",function(e){
+          e.preventDefault();
+          var firstName = $("#firstName").val();
+          console.log(firstName)
+          var lastName = $("#lastName").val();
+          console.log(lastName)
+          var email = $("#email").val();
+          console.log(email)
+          $.ajax({
+            type:"POST",
+            url:"editUserProfile/",
+            data:{
+              'first_name':firstName,
+              'last_name':lastName,
+              'email':email,
+            },
+            success: function(data){
+              appendModal(data)
+              removeDjangoProfile()
+              getDjangoProfile()
+            },
+            beforeSend: function (tkn) {
+              tkn.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            },
+          });
+        });
+      });
+    });
+
+    function getTwitterProfile(){
+      $.ajax({
+        type:'POST',
+        url:'getTwitterProfile/',
+        success: function(data){
+          appendTwitterDiv(data)
+        },
+        beforeSend: function (tkn) {
+          tkn.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+        },
+      });
+    }
+
+    function getDjangoProfile(){
+      $.ajax({
+        type:'POST',
+        url:'getDjangoProfile/',
+        success: function(data){
+          appendDjangoDiv(data)
+        },
+        beforeSend: function (tkn) {
+          tkn.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+        },
+      });
+    }
+
+    function appendTwitterDiv(data){
+      console.log(data)
+      var twitterName = data[0]['twitterName']
+      var screenName = data[0]['screen_name']
+      var followerCount = data[0]['followerCount']
+      var tweetCount = data[0]['tweetCount']
+      var accountDescription = data[0]['accountDescription']
+      var profileImage = data[0]['profileImageLink']
+      var card = "<ul class='django-profile list-group list-group-flush'><li class='card-text list-group-item'>Twitter username: "+screenName+"</li><li class='card-text list-group-item'>Twitter Name: "+twitterName+"</li> <li class='card-text list-group-item'>Follower Count: "+followerCount+"</li><li class='card-text list-group-item'>Tweet Count: "+tweetCount+"</li><li class='card-text list-group-item'>Bio: "+accountDescription+"</li></ul>"
+      $(".twitterProfile").append(card);
+      image = "<img src='"+profileImage+"'>"
+      $(".profile-image").append(image)
+    }
+
+    function appendDjangoDiv(data){
+      console.log(data)
+      var username = data[0]['username']
+      var firstName = data[0]['first_name']
+      var lastName = data[0]['last_name']
+      var email = data[0]['email']
+      var dob = data[0]['dob']
+      var generatedTweets = data[0]['numberOfGeneratedTweets']
+      var card = "<ul class='django-profile list-group list-group-flush'><li class='card-text list-group-item'>Username: "+username+"</li><li class='card-text list-group-item'>First Name: "+firstName+"</li> <li class='card-text list-group-item'>Last Name: "+lastName+"</li><li class='card-text list-group-item'>Email: "+email+"</li><li class='card-text list-group-item'>Date of Birth: {{dob}}</li><li class='card-text list-group-item'>Number of Generated Tweets: "+generatedTweets+"</li></ul>"
+      $(".profile-body").append(card);
+    }
+
+    function removeDjangoProfile(){
+      $(".profile-body").html("");
+    }
+
+    function appendModal(data){
+      $(".modal-subtitle").append("   " + data)
+    }
+
+    </script>
+    {% endblock %}
+  </body>
+</html>
