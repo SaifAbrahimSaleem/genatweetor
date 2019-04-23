@@ -6,4 +6,4 @@ twython
 twython-django
 psycopg2-binary
 whitenoise
-django-rest-pandas
+rest-pandas
