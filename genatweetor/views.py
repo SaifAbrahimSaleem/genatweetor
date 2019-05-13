@@ -311,8 +311,8 @@ def trainModel(user):
     location = 'temp/word2vecModels/word2vecModel-User'
     file = location + userID + ".txt"
     exists = os.path.isfile(file)
-    if Tweet.objects.filter(userTweeted_id=user.id, usedInTraining=False).exists():
-        if os.path.isfile(file):
+    if os.path.isfile(file):
+        if Tweet.objects.filter(userTweeted_id=user.id, usedInTraining=False).exists():
             w2vModel = gensim.models.Word2Vec.load(file)
             tweetObjects = Tweet.objects.filter(userTweeted_id=user.id, usedInTraining=False)
             for tweet in tweetObjects:
@@ -324,18 +324,18 @@ def trainModel(user):
                     continue
             w2vModel.train(clean_tweets, total_examples=w2vModel.corpus_count, epochs=w2vModel.iter)
             w2vModel.save(file)
-        else:
-            tweetObjects = Tweet.objects.filter(userTweeted_id=user.id, usedInTraining=False)
-            for tweet in tweetObjects:
-                if tweet.usedInTraining==False:
-                    clean_tweets.append(tweet.cleanTweetText())
-                    tweet.usedInTraining = True
-                    tweet.save()
-                else:
-                    continue
-            model = Word2Vec(clean_tweets, size=150, window=10, min_count=1,workers=10,iter=10)
-            file = location + userID
-            model.save(file)
+    else:
+        tweetObjects = Tweet.objects.filter(userTweeted_id=user.id, usedInTraining=False)
+        for tweet in tweetObjects:
+            if tweet.usedInTraining==False:
+                clean_tweets.append(tweet.cleanTweetText())
+                tweet.usedInTraining = True
+                tweet.save()
+            else:
+                continue
+        model = Word2Vec(clean_tweets, size=150, window=10, min_count=1,workers=10,iter=10)
+        file = location + userID
+        model.save(file)
     return
 
 @is_loggedin
