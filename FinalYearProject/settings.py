@@ -21,12 +21,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES_DIR = (
     os.path.join(BASE_DIR, 'templates'),
 )
-#credentials = {
 APP_KEY='OKWYt7fT3rHd6VjA8HOoRVpGM'
 APP_SECRET='Wek3pFj602EOmufJzJzvgPpIaZjpol5U7PsTZhEGfZ9WFKstr0'
 ACCESS_TOKEN="49578139-hOAZhsi6o4TlDuqwIQc5FJHz3byCNsEsbskCK6tDh"
 ACCESS_SECRET= "95idexegEPYioUTWH9qAql6pTJEowcFFjRStrre7xNc1l"
-#    }
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -59,15 +58,14 @@ LOGGING = {
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
+    'django.contrib.staticfiles',
+    'genatweetor',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    #3rd party Apps
-    #Local Apps
-    'genatweetor',
 ]
 
 MIDDLEWARE = [
