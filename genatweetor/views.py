@@ -322,7 +322,6 @@ def trainModel(user):
                     tweet.save()
                 else:
                     continue
-            w2vModel.build_vocab(clean_tweets)
             w2vModel.train(clean_tweets, total_examples=w2vModel.corpus_count, epochs=w2vModel.iter)
             w2vModel.save(file)
     else:
@@ -335,7 +334,6 @@ def trainModel(user):
             else:
                 continue
         model = Word2Vec(clean_tweets, size=150, window=10, min_count=1,workers=10,iter=10)
-        model.build_vocab(clean_tweets)
         model.train(clean_tweets)
         model.save(file)
     return
