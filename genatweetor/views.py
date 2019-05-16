@@ -428,9 +428,10 @@ def generateTweets(request,user):
 def postTweet(request,user):
     tweetText = request.POST['tweetText']
     twitter = Twython(settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
+    credentials = twitter.verify_credentials()
     twitter.update_status(status=tweetText)
     response = {"Successful!"}
-    postedTweet = twitter.get_user_timeline(screen_name=SCREEN_NAME, exclude_replies=True, include_rts=True, count=1)
+    postedTweet = twitter.get_user_timeline(screen_name=credentials['screen_name'], exclude_replies=True, include_rts=True, count=1)
     newTweet = Tweet(userTweeted=user,tweetID=postedTweet['id_str'], tweetedBy=postedTweet['screen_name'], tweetText=postedTweet['text'], tweetDate=datetime.strptime(tweet["created_at"], '%a %b %d %H:%M:%S +0000 %Y'), tweetFavourites=postedTweet['favorite_count'], tweetRetweets=postedTweet['retweet_count'])
     return JsonResponse(list(response), safe=False)
 
