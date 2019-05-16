@@ -205,7 +205,7 @@ def profile(request, user):
 @is_loggedin
 def getTwitterProfile(request, user):
     profileAttributes = []
-    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
+    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
     credentials = twitter.verify_credentials()
     screenName = credentials['screen_name']
 
@@ -229,7 +229,7 @@ def getTwitterProfile(request, user):
 @is_loggedin
 def getDjangoProfile(request, user):
     profileAttributes = []
-    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
+    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
     credentials = twitter.verify_credentials()
     screenName = credentials['screen_name']
     userAttributes = twitter.show_user(screen_name=screenName)
@@ -278,9 +278,9 @@ def tweetsArchive(request, user):
 
 @is_loggedin
 def getTweets(request,user):
-    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
+    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
     credentials = twitter.verify_credentials()
-    tweetObjects = Tweet.objects.filter(tweetedBy=credentials['screen_name'])
+    tweetObjects = Tweet.objects.filter(userTweeted_id = user.id)
     if tweetObjects:
         tweets = []
         for tweet in tweetObjects:
@@ -349,7 +349,7 @@ def updateTimeline(request,user):
             return response
         else:
             count = int(request.POST['count'])
-            twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
+            twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
             credentials = twitter.verify_credentials()
             SCREEN_NAME = credentials['screen_name']
             try:
@@ -424,7 +424,7 @@ def generateTweets(request,user):
     if 'count' in request.POST:
         count = request.POST['count']
         generatedTweets = []
-        twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
+        twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
         credentials = twitter.verify_credentials()
         twitter_id = credentials['id']
         generator = tweet_generator.PersonTweeter(str(twitter_id), settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
@@ -436,7 +436,7 @@ def generateTweets(request,user):
 @is_loggedin
 def postTweet(request,user):
     tweetText = request.POST['tweetText']
-    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
+    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
     twitter.update_status(status=tweetText)
     response = {"Successful!"}
     return JsonResponse(list(response), safe=False)
