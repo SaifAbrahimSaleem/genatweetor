@@ -23,8 +23,8 @@ TEMPLATES_DIR = (
 )
 APP_KEY='OKWYt7fT3rHd6VjA8HOoRVpGM'
 APP_SECRET='Wek3pFj602EOmufJzJzvgPpIaZjpol5U7PsTZhEGfZ9WFKstr0'
-ACCESS_TOKEN="49578139-hOAZhsi6o4TlDuqwIQc5FJHz3byCNsEsbskCK6tDh"
-ACCESS_SECRET= "95idexegEPYioUTWH9qAql6pTJEowcFFjRStrre7xNc1l"
+ACCESS_TOKEN='49578139-4YnJSSjfkF8oFzMIynlCkfYHKiNPphG9ZJkOnO2qy'
+ACCESS_SECRET= 'DyzjrL1Owzxtz05V3Otttsu3gynRxbb6Q7tNacZwzpwNw'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -37,7 +37,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['.herokuapp.com']
 
-# Error Logging 
+# Error Logging
 
 LOGGING = {
     'version': 1,
