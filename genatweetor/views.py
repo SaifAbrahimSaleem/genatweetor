@@ -64,7 +64,7 @@ def login(request):
             # #################################################
             twitter = Twython(app_key=settings.APP_KEY , app_secret=settings.APP_SECRET)
             #callback url
-            auth = twitter.get_authentication_tokens(callback_url='http://127.0.0.1:8000/dashboard')
+            auth = twitter.get_authentication_tokens(callback_url='https://genatweetor.herokuapp.com/dashboard')
                #Change to https://genatweetor.herokuapp.com/dashboard after testing is done
             #save oauth tokens into a session variable (a temporary method of storing the oauth variables)
             request.session['oauth_token'] = auth['oauth_token']
