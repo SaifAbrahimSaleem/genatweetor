@@ -133,29 +133,32 @@ def dashboard(request, user):
     file = location + userID + ".txt"
     exists = os.path.isfile(file)
     if exists:
-        w2vModel = gensim.models.Word2Vec.load(file)
-        w2vModelVocab = w2vModel[w2vModel.wv.vocab]
-        clusterer = KMeansClusterer(NUMBER_OF_CLUSTERS, distance=nltk.cluster.cosine_distance, repeats=30)
-        clusters = clusterer.cluster(w2vModelVocab, assign_clusters=True)
-        word_list = list(w2vModel.wv.vocab)
-        kmeans = cluster.KMeans(n_clusters = NUMBER_OF_CLUSTERS)
-        kmeans.fit(w2vModelVocab)
-        kMeans_labels = kmeans.labels_
-        KMeansScore = kmeans.score(w2vModelVocab)
-        silScore = metrics.silhouette_score(w2vModelVocab, kMeans_labels, metric='euclidean')
-        sum = 0
-        count = 0
-        retweetSum = 0
-        favouriteSum = 0
-        tweetObjects = Tweet.objects.filter(userTweeted_id=user.id)
-        for tweet in tweetObjects:
-            count = count + 1
-            sum = sum + tweet.calculateTweetScore()
-            retweetSum = retweetSum + tweet.tweetRetweets
-            favouriteSum = favouriteSum + tweet.tweetFavourites
-        AverageRetweetScore = (retweetSum * 0.567)/count
-        AverageFavouriteScore = (favouriteSum * 0.486)/count
-        engagementScore = sum / count
+        try:
+            w2vModel = gensim.models.Word2Vec.load(file)
+            w2vModelVocab = w2vModel[w2vModel.wv.vocab]
+            clusterer = KMeansClusterer(NUMBER_OF_CLUSTERS, distance=nltk.cluster.cosine_distance, repeats=30)
+            clusters = clusterer.cluster(w2vModelVocab, assign_clusters=True)
+            word_list = list(w2vModel.wv.vocab)
+            kmeans = cluster.KMeans(n_clusters = NUMBER_OF_CLUSTERS)
+            kmeans.fit(w2vModelVocab)
+            kMeans_labels = kmeans.labels_
+            KMeansScore = kmeans.score(w2vModelVocab)
+            silScore = metrics.silhouette_score(w2vModelVocab, kMeans_labels, metric='euclidean')
+            sum = 0
+            count = 0
+            retweetSum = 0
+            favouriteSum = 0
+            tweetObjects = Tweet.objects.filter(userTweeted_id=user.id)
+            for tweet in tweetObjects:
+                count = count + 1
+                sum = sum + tweet.calculateTweetScore()
+                retweetSum = retweetSum + tweet.tweetRetweets
+                favouriteSum = favouriteSum + tweet.tweetFavourites
+            AverageRetweetScore = (retweetSum * 0.567)/count
+            AverageFavouriteScore = (favouriteSum * 0.486)/count
+            engagementScore = sum / count
+        except ZeroDivisionError:
+            pass
     else:
         AverageRetweetScore = 0.0
         AverageFavouriteScore = 0.0
