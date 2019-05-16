@@ -13,7 +13,7 @@ list_of_stopwords = set(stopwords.words("english")) # list of common english wor
 
 class User(User): # class User extends django.contrib.auth.model's current User model
     dob = models.DateTimeField('Date of Birth') # Store the user's date of birth
-    tweetCount = models.IntegerField(blank=True, default=0) # Store the amount of tweets associated with the user's twitter account
+    tweetCount = models.BigIntegerField(blank=True, default=0) # Store the amount of tweets associated with the user's twitter account
     followerCount = models.IntegerField(blank=True, default=0) # Store the amount of followers associated with the user's twitter account
     accountDescription = models.CharField(max_length=300, blank=True, default='Hello World! I am using Genatweetor!') # store the account description associated with the user
     numberOfGeneratedTweets = models.IntegerField(blank=True, default = 0) # Store the number of generated tweets associated with the user
