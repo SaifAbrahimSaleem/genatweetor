@@ -4,14 +4,160 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    {% block headertags%}
-      <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/generateTweet.css'%}">
+    {% block headertags %}
+      <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/tweetsArchive.css'%}">
+      <title>Genatweetor: Tweets-Archive</title>
     {% endblock %}
-    <title></title>
   </head>
   <body>
     {% block body-content %}
-      <p>Hello World! GenerateTweet </p>
+      <main role="main" class="col-md-15 px-10">
+        <div class="mainapp">
+
+          <div class="modal" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="ModalLongTitle">View Tweet</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="tweetedByCard card-title"></div>
+                  <div class="viewTweet card" id="">
+                      <textarea class="tweetTextCard md-textarea form-control" rows="3"></textarea>
+                  </div>
+                  <div class="tweetDateCard card-body float-right"></div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="postBtn btn btn-success float-left">Post Tweet</button>
+                  <button type="button" class="btn btn-secondary float-right" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-card card row">
+              <div class="titleCard card-body">
+                <h3 class="card-title"> <strong>Tweet Generator:</strong> </h3>
+                <p class="card-text">Welcome to the Tweet Generator! Here, you will be able to Generate and potentially post Tweets!</p>
+                <br>
+                <div class="updateCard form-group row col-xs-20">
+                  <label for="numberOfTweets" class="form-label column col-sm-4 col-form-label"> <h4> <strong>Update Timeline: </strong> </h4> </label>
+                  <input type="text" id="numberOfTweets" class="numberOfTweets form-control column d-block col-sm-3" id="numberOfTweets" name="numberOfTweets" placeholder="Maximum 100 tweets to update">
+                  <button class="updateBtn btn btn-primary" type="button" name="updateBtn">Update</button>
+                </div>
+              </div>
+          </div>
+          {% load static %}
+          <div class="tweets row"></div>
+
+        </div>
+      </main>
+    {% endblock %}
+    {% block script-tags %}
+    <script>
+    $(document).ready(function(){
+      $(".updateBtn").on('click', function(){
+          updateGenLine();
+      });
+      $(".modal").on('show.bs.modal', function(e){
+        card = e.relatedTarget;
+        cardID = card.id;
+        var tweetObjID = card.childNodes[0].id
+        var tweetedBy = $("#tweetedBy"+cardID).html();
+        var tweetText = $("#tweetText"+cardID).html();
+        var tweetDate = $("#tweetDate"+cardID).html();
+
+        $(".viewTweet").prop('id', '')
+        $(".viewTweet").prop('id', tweetObjID)
+
+        $(".tweetedByCard").html("");
+        $(".tweetTextCard").html("");
+        $(".tweetDateCard").html("");
+        $(".tweetTextCard").html(tweetText);
+      });
+      
+      $(".postBtn").on('click', function(){
+        var text = $(".tweetTextCard").val()
+        console.log(text)
+        $.ajax({
+          type:'POST',
+          url:'postTweet/',
+          data:{
+            'tweetText':text,
+          },
+          success: function(data){
+              alert("SUCCESS!");
+              $(".tweetTextCard").html("");
+          },
+          beforeSend: function (tkn) {
+            tkn.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+          },
+        });
+      })
+    });
+
+    function updateGenLine(){
+      count = $("#numberOfTweets").val()
+      if(count == null){
+        alert("Please Enter a Value");
+      }
+      else if(count <= 0){
+        alert("Please Enter a Value between 1 and 20!");
+      }
+      else if (count>100){
+        alert("Limit exceeded! Please Enter a Value between 1 and 100!");
+      }
+      else{
+        $.ajax({
+          type:'POST',
+          url:'generateTweets/',
+          data:{
+            'count':count,
+          },
+          success: function(data){
+              createCards(data)
+          },
+          beforeSend: function (tkn) {
+            tkn.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+          },
+        });
+      }
+    }
+
+
+    function createCards(data){
+      $(".tweets").html("");
+      if(data[0]==""){
+        var message = "(ಥ﹏ಥ)  No Tweets found!  (ಥ﹏ಥ)";
+        var submessage = "Enter a value and update your timeline to view previous tweets!";
+        $(".tweets").append("<div class='tweetMessageCard card'><div class='tweetMessageCardBody card-body'><div class='text'><h4 class='card-title'><strong>"+ message +"</strong></h4><h5 class='card-subtitle'>"+submessage+"</h5></div></div></div>");
+      }
+      else{
+        for(var i=0; i<data.length; i++){
+          var id=i;
+          var tweet = data[i];
+          card = "";
+          {% load static %}
+          card = "<div class='col-lg-3 col-md-5 mb-4 hoverable' id='card'><a class='tweetCard mask flex-center' id='"+i+"' data-toggle='modal' data-target='#ModalCenter'><div class='tweetCard card' id='"+i+"'><div class='tweetCardBody card-body'><strong class='card-text list-group-item text-center' id='tweetText"+i+"'>"+ data[i] +"</strong></div></div></a></div>";
+          $(".tweets").append(card);
+        }
+      }
+    }
+
+    function deleteCard(data,id){
+        if(data[0]==="Deleted!"){
+          $("#card"+id).remove();
+          $(".modal").modal('toggle');
+          alert(data[0]);
+        }
+        else{
+          alert(data[0]);
+        }
+    }
+    </script>
     {% endblock %}
   </body>
 </html>

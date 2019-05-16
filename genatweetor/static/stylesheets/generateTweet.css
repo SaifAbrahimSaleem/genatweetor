@@ -2,13 +2,9 @@
 @import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css);
 @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css);
 
-$shadow-color: #23203b;
-$input-color: lighten(#AB9E95, 10%);
-$input-border-color: #5E5165;
-$button-background-color: #27AE60;
-
 html{
   min-height:100%;
+  width:auto;
   position:relative;
 }
 
@@ -16,12 +12,8 @@ body{
   height:100%;
   width:100%;
   background-color: rgb(204, 206, 209);
+  overflow-x:hidden;
 }
-
-.jumbotron{
-  position:fixed;
-}
-
 
 .logo{
   width:80%;
@@ -80,7 +72,6 @@ body{
 
 .sidebar-container{
   padding-top: 20%;
-  margin-left:0px;
   margin-right:10px;
   padding-right:6%;
   vertical-align: middle;
@@ -105,4 +96,80 @@ body{
   margin-bottom: 20px;
   vertical-align:middle;
   text-align: center;
+}
+
+.mainapp{
+  position:absolute;
+  margin: 5% 25%;
+  width:80%;
+  overflow-x: hidden;
+  display:block;
+}
+
+.timeline-card{
+  width:80%;
+  height:auto;
+  display:block;
+}
+
+.titleCard{
+  margin-left:2%;
+}
+
+.titleCard p{
+    text-indent: 1%;
+}
+
+.updateCard{
+  align-items:center;
+}
+
+.updateCard input{
+  padding:1%;
+}
+
+.updateBtn{
+  float: right;
+}
+
+.tweets{
+  margin-top:10px;
+  max-width:80%;
+  height:50%;
+  display:flex;
+}
+
+.tweetCard{
+  margin-top: 1%;
+  min-height:300px;
+  flex:1;
+}
+
+.tweetCard:hover{
+  background-color: rgb(201, 211, 226);
+}
+
+.tweetCardBody{
+  min-height: 100px;
+}
+
+.tweetMessageCard{
+  width:100%;
+  height:500px;
+}
+
+.tweetMessageCardBody{
+  display:table;
+  width:100%;
+  height:500px;
+}
+
+.tweetMessageCardBody .text{
+  display:table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.viewTweet{
+  text-align:center;
 }

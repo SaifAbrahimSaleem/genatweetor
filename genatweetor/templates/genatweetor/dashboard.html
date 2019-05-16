@@ -17,7 +17,7 @@
             <div class="card-row row card-row2 row col-lg-10">
               <div class="profile-card card column">
                 <div class="card-body">
-                  <h4 class="card-title"> <strong> Your Profile </strong> </h4>
+                  <h3 class="card-title"> <strong> Your Profile </strong> </h3>
                   <ul class="list-group list-group-flush">
                     <li class="card-text list-group-item">Username: {{ user }}</li>
                     <li class="card-text list-group-item">Name: {{ name }}</li>
@@ -28,23 +28,20 @@
                   </ul>
                 </div>
               </div>
-              <div class="overallMood-card card column">
-                <img class="card-img-top" src="{% static 'profileImages/smile.jpg' %}" alt="Card image cap">
+              <div class="stats-card card column">
                 <div class="card-body">
-                  <h3 class="card-title">Your Overall Mood</h3>
-                  <p class="card-text">You are: (Insert Mood)</p>
+                  <h3 class="card-title"><strong>Engagement Statistics</strong></h3>
+                  <ul class="list-group list-group-flush">
+                    <li class="engagementScore card-text list-group-item" id="engagementScore">Average Engagement Score: {{engagementScore}} </li>
+                    <li class="retweetScore card-text list-group-item" id="retweetScore">Average Retweet Score: {{retweetScore}} </li>
+                    <li class="favouriteScore card-text list-group-item" id="favouriteScore">Average Favourite Score: {{favouriteScore}}</li>
+                    <li class="KmeansScore card-text list-group-item" id="KmeansScore">K means Score: {{kmeans}}</li>
+                    <li class="silhouetteScore card-text list-group-item" id="silhouetteScore">Silhouette Score: {{silhouetteScore}}</li>
+                    <div class="append list-group-item"></div>
+                  </ul>
                 </div>
               </div>
             </div>
-            <div class="card-row2 row col-lg-10">
-              <div class="statistics-card card column">
-                <div class="card-body">
-                  <h3 class="card-title">Average Engagement (Past 7-days)</h3>
-                  <p class="card-text">Include Graph from django rest-pandas</p>
-                </div>
-              </div>
-            </div>
-
           </div>
 
         </main>

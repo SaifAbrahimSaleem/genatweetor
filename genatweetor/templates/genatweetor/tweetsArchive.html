@@ -24,11 +24,11 @@
                   </button>
                 </div>
                 <div class="modal-body">
+                  <div class="tweetedByCard card-title"></div>
                   <div class="viewTweet card" id="">
-                      <div class="tweetedByCard card-title"><strong>Tweeted By:</strong> </div>
                       <div class="card-body"><strong class="tweetTextCard"></strong></div>
-                      <div class="tweetDateCard card-body"><strong>Date Tweeted:</strong> </div>
                   </div>
+                  <div class="tweetDateCard card-body float-right"></div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="deleteBtn btn btn-danger float-left">Delete Tweet</button>
@@ -45,7 +45,7 @@
                 <br>
                 <div class="updateCard form-group row col-xs-20">
                   <label for="numberOfTweets" class="form-label column col-sm-4 col-form-label"> <h4> <strong>Update Timeline: </strong> </h4> </label>
-                  <input type="text" id="numberOfTweets" class="numberOfTweets form-control column d-block col-sm-3" id="numberOfTweets" name="numberOfTweets" placeholder="Maximum 20 tweets to update">
+                  <input type="text" id="numberOfTweets" class="numberOfTweets form-control column d-block col-sm-3" id="numberOfTweets" name="numberOfTweets" placeholder="Maximum 100 tweets to update">
                   <button class="updateBtn btn btn-primary" type="button" name="updateBtn">Update</button>
                 </div>
               </div>
@@ -78,14 +78,15 @@
           $(".tweetTextCard").html("");
           $(".tweetDateCard").html("");
 
-          $(".tweetedByCard").append(tweetedBy);
+          $(".tweetedByCard").append("Tweeted By:  <strong> "+tweetedBy+"</strong>");
           $(".tweetTextCard").append(tweetText);
-          $(".tweetDateCard").append(tweetDate);
+          $(".tweetDateCard").append("Date Tweeted: <strong> "+tweetDate+"</strong>");
         });
 
         $(".deleteBtn").on('click', function(){
           var tweetText = $(".tweetTextCard").html();
           id = $(".viewTweet").prop('id');
+          console.log(id)
           if(confirm("Are you sure you want to delete this Tweet?")){
             $.ajax({
               type:'DELETE',
@@ -109,6 +110,7 @@
             type:'POST',
             url:'getTweets/',
             success: function(data){
+              //console.log(data)
               createCards(data)
             },
             beforeSend: function (tkn) {
@@ -127,8 +129,8 @@
         else if(count <= 0){
           alert("Please Enter a Value between 1 and 20!");
         }
-        else if (count>20){
-          alert("Limit exceeded! Please Enter a Value between 1 and 20!");
+        else if (count>100){
+          alert("Limit exceeded! Please Enter a Value between 1 and 100!");
         }
         else{
           $.ajax({

@@ -89,6 +89,7 @@ body{
   text-align: center;
 }
 .mainapp{
+  padding-top: 10%;
   position:absolute;
   margin: auto 30%;
   width:100%;
@@ -103,7 +104,7 @@ body{
   display:block;
 }
 
-.overallMood-card{
+.stats-card{
   margin-left: 50px;
   padding:10%;
   width:40%;
@@ -116,10 +117,7 @@ body{
   margin-bottom: 20px;
 }
 
-.statistics-card{
-
-  padding:5%;
-  width:84%;
-  height:auto;
-  display:block;
+.load-button{
+  top:0;
+  right:0;
 }

@@ -2,29 +2,38 @@ from django.conf import settings #then do settings.theVariableYouWantToAccess
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponse, JsonResponse, Http404
-from twython import Twython, TwythonError
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
 from django.db import IntegrityError
 from .models import User, Tweet
+from twython import Twython, TwythonError
 from datetime import datetime, timezone
-import json
-# Create your views here.
+from gensim.models import Word2Vec
+from nltk.cluster import KMeansClusterer
+from sklearn import cluster, metrics
+from tweet_generator import tweet_generator
+import gensim
+import nltk
+import pytz
+import os
+
 
 appname = 'genatweetor'
+NUMBER_OF_CLUSTERS = 10
 
 def is_loggedin(view):
-    def loggedin_view(request):
+    def isloggedinView(request):
         #Check to see if the user's username is in the request
         if 'username' in request.session:
             username = request.session['username']
             try:
-                u = User.objects.get(username=username)
+                userAccount = User.objects.get(username=username)
             except User.DoesNotExist:
-                raise Http404('User does not exist')
-            return view(request, u)
+                raise Http404('That username does not exist! Please Try again!')
+            return view(request, userAccount)
         else:
             return render(request, 'genatweetor/login.html')
-    return loggedin_view
+    return isloggedinView
 
 #LOGIN VIEW
 def index(request):
@@ -92,13 +101,7 @@ def register(request):
                 'responseMessage' : "Please enter a username and password!"
             }
             return render(request, 'genatweetor/register.html', response)
-        user = User(
-            username=username,
-            first_name=firstName,
-            last_name=lastName,
-            email=email,
-            dob=dateOfBirth,
-        )
+        user = User(username=username, first_name=firstName, last_name=lastName, email=email, dob=dateOfBirth)
 
         user.set_password(password)
         try:
@@ -108,7 +111,6 @@ def register(request):
             response = {
                 'responseMessage' : "Username or E-mail is already Taken, Please enter something different"
                 }
-            print(e)
             return render(request, 'genatweetor/register.html', response)
         response = {
             'responseMessage' : "You have been successfully registered! You can now Login!"
@@ -119,15 +121,47 @@ def register(request):
     }
     return render(request, 'genatweetor/login.html', response)
 
-#dashboard view
 @is_loggedin
 def dashboard(request, user):
      # if user denied authorization
     if 'denied' in request.session:
         return HttpResponse("USER DENIED")
-
     twitter = Twython(settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
     credentials = twitter.verify_credentials()
+    userID = str(user.id)
+    location = 'temp/word2vecModels/word2vecModel-User'
+    file = location + userID + ".txt"
+    exists = os.path.isfile(file)
+    if exists:
+        w2vModel = gensim.models.Word2Vec.load(file)
+        w2vModelVocab = w2vModel[w2vModel.wv.vocab]
+        clusterer = KMeansClusterer(NUMBER_OF_CLUSTERS, distance=nltk.cluster.cosine_distance, repeats=30)
+        clusters = clusterer.cluster(w2vModelVocab, assign_clusters=True)
+        word_list = list(w2vModel.wv.vocab)
+        kmeans = cluster.KMeans(n_clusters = NUMBER_OF_CLUSTERS)
+        kmeans.fit(w2vModelVocab)
+        kMeans_labels = kmeans.labels_
+        KMeansScore = kmeans.score(w2vModelVocab)
+        silScore = metrics.silhouette_score(w2vModelVocab, kMeans_labels, metric='euclidean')
+        sum = 0
+        count = 0
+        retweetSum = 0
+        favouriteSum = 0
+        tweetObjects = Tweet.objects.filter(userTweeted_id=user.id)
+        for tweet in tweetObjects:
+            count = count + 1
+            sum = sum + tweet.calculateTweetScore()
+            retweetSum = retweetSum + tweet.tweetRetweets
+            favouriteSum = favouriteSum + tweet.tweetFavourites
+        AverageRetweetScore = (retweetSum * 0.567)/count
+        AverageFavouriteScore = (favouriteSum * 0.486)/count
+        engagementScore = sum / count
+    else:
+        AverageRetweetScore = 0.0
+        AverageFavouriteScore = 0.0
+        engagementScore = 0.0
+        KMeansScore = 0
+        silScore = 0
     response = {
         'name' : user.first_name + " " + user.last_name,
         'twitterName': credentials['name'],
@@ -139,14 +173,14 @@ def dashboard(request, user):
         'tweetCount' : user.getTweetCount(),
         'followerCount': user.getFollowerCount(),
         'accountDescription' : user.accountDescription,
-        'responseMessage' : "Welcome to Genatweetor"
+        'responseMessage' : "Welcome to Genatweetor",
+        'retweetScore':AverageRetweetScore,
+        'favouriteScore':AverageFavouriteScore,
+        'engagementScore':engagementScore,
+        'kmeans':KMeansScore,
+        'silhouetteScore':silScore
     }
-
     return render(request, 'genatweetor/dashboard.html', response)
-
-@is_loggedin
-def setting(request, user):
-    return render(request, 'genatweetor/settings.html')
 
 @is_loggedin
 def profile(request, user):
@@ -192,7 +226,6 @@ def getDjangoProfile(request, user):
     userAttributes = twitter.show_user(screen_name=screenName)
     user.save()
     query = User.objects.filter(id=user.id).values('first_name', 'last_name', 'username', 'email', 'numberOfGeneratedTweets')
-    print(query)
     return JsonResponse(list(query), safe=False)
 
 @is_loggedin
@@ -245,22 +278,59 @@ def getTweets(request,user):
             text = tweet.getTweetText()
             date = tweet.getDateTweeted()
             user = tweet.getUserTweeted()
+            retweetCount = tweet.getRetweetCount()
+            favouriteCount = tweet.getFavouriteCount()
+
             tweetAttributes = {
-                'tweetID':tweet.id,
+                'tweetID':tweet.tweetID,
                 'tweetText':text,
                 'tweetDate':date,
-                'tweetedBy':user
+                'tweetedBy':user,
+                'tweetFavourites': favouriteCount,
+                'tweetRetweets': retweetCount
             }
             tweets.append(tweetAttributes)
+            #call score tweet
         return JsonResponse(tweets, safe=False)
     else:
-        print("entered else")
         response = []
         response.append(list(tweetObjects))
         return JsonResponse(response, safe=False)
+
+def trainModel(user):
+    clean_tweets = []
+    userID = str(user.id)
+    location = 'temp/word2vecModels/word2vecModel-User'
+    file = location + userID + ".txt"
+    exists = os.path.isfile(file)
+    if Tweet.objects.filter(userTweeted_id=user.id, usedInTraining=False).exists():
+        if os.path.isfile(file):
+            w2vModel = gensim.models.Word2Vec.load(file)
+            tweetObjects = Tweet.objects.filter(userTweeted_id=user.id, usedInTraining=False)
+            for tweet in tweetObjects:
+                if tweet.usedInTraining==False:
+                    clean_tweets.append(tweet.cleanTweetText())
+                    tweet.usedInTraining = True
+                    tweet.save()
+                else:
+                    continue
+            w2vModel.train(clean_tweets, total_examples=w2vModel.corpus_count, epochs=w2vModel.iter)
+            w2vModel.save(file)
+        else:
+            tweetObjects = Tweet.objects.filter(userTweeted_id=user.id, usedInTraining=False)
+            for tweet in tweetObjects:
+                if tweet.usedInTraining==False:
+                    clean_tweets.append(tweet.cleanTweetText())
+                    tweet.usedInTraining = True
+                    tweet.save()
+                else:
+                    continue
+            model = Word2Vec(clean_tweets, size=150, window=10, min_count=1,workers=10,iter=10)
+            model.save(file)
+    return
+
 @is_loggedin
 def updateTimeline(request,user):
-        # get user credentials
         tweetObjects = []
         tweets = []
         if not 'count' in request.POST:
@@ -275,18 +345,22 @@ def updateTimeline(request,user):
             SCREEN_NAME = credentials['screen_name']
             try:
                 user_timeline = twitter.get_user_timeline(screen_name=SCREEN_NAME, exclude_replies=True, include_rts=True, count=count)
-                #print(user_timeline)
             except TwythonError as e:
                 raise Http404(e)
             for tweet in user_timeline:
-                id = tweet['id_str']
+                id = int(tweet['id_str'])
+                favouritecounter = tweet['favorite_count']
+                retweetcounter = tweet['retweet_count']
                 if Tweet.objects.filter(tweetID=id).exists():
                     continue
                 text = tweet['text']
-                date = datetime.strptime(tweet["created_at"], '%a %b %d %H:%M:%S %z %Y').replace(tzinfo=timezone.utc).astimezone(tz=timezone.utc).strftime('%Y-%m-%d')
-                userTweet = Tweet(userTweeted=user,tweetID=id,tweetedBy=SCREEN_NAME, tweetText=text, tweetDate=date)
+                timezone = pytz.timezone('UTC')
+                tweetDate = datetime.strptime(tweet["created_at"], '%a %b %d %H:%M:%S +0000 %Y')
+                date = timezone.localize(tweetDate)
+                userTweet = Tweet(userTweeted=user,tweetID=id, tweetedBy=SCREEN_NAME, tweetText=text, tweetDate=date, tweetFavourites=favouritecounter, tweetRetweets=retweetcounter)
                 tweetObjects.append(userTweet)
                 try:
+                    print(userTweet)
                     userTweet.save()
                 except IntegrityError as e:
                     print("IntegrityError")
@@ -295,21 +369,27 @@ def updateTimeline(request,user):
             for tweet in tweetObjects:
                 text = tweet.getTweetText()
                 date = tweet.getDateTweeted()
-                user = tweet.getUserTweeted()
+                userTweeted = tweet.getUserTweeted()
+                retweetCount = tweet.getRetweetCount()
+                favouriteCount = tweet.getFavouriteCount()
+
                 tweetAttributes = {
                     'tweetText':text,
                     'tweetDate':date,
-                    'tweetedBy':user
+                    'tweetedBy':userTweeted,
+                    'tweetFavourites': favouriteCount,
+                    'tweetRetweets': retweetCount
                 }
                 tweets.append(tweetAttributes)
+            trainModel(user)
             return JsonResponse(tweets, safe=False)
 
-def deleteTweet(request, id):
+def deleteTweet(request, tweetID):
     #get the tweet text and search for it in the database
     #delete the tweet object
     if request.method == "DELETE":
-        if Tweet.objects.filter(id=id).exists():
-            delTweet = Tweet.objects.filter(id=id)
+        if Tweet.objects.filter(tweetID=tweetID).exists():
+            delTweet = Tweet.objects.filter(tweetID=tweetID)
             delTweet.delete()
             responseMessage = {
                 "Deleted!"
@@ -327,9 +407,32 @@ def deleteTweet(request, id):
         return JsonResponse(list(responseMessage), safe=False)
 
 @is_loggedin
-def statistics(request, user):
-    return render(request, 'genatweetor/statistics.html')
+def generateTweet(request,user):
+    return render(request, 'genatweetor/generateTweet.html')
 
 @is_loggedin
-def generateTweet(request, user):
-    return render(request, 'genatweetor/generateTweet.html')
+def generateTweets(request,user):
+    if 'count' in request.POST:
+        count = request.POST['count']
+        generatedTweets = []
+        twitter = Twython(settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
+        credentials = twitter.verify_credentials()
+        twitter_id = credentials['id']
+        generator = tweet_generator.PersonTweeter(str(twitter_id), settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
+        for i in range(int(count)):
+            generated_tweet = generator.generate_random_tweet()
+            generatedTweets.append(generated_tweet)
+        return JsonResponse(list(generatedTweets), safe=False)
+
+
+def postTweet(request):
+    tweetText = request.POST['tweetText']
+    twitter = Twython(settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
+    twitter.update_status(status=tweetText)
+    response = {"Successful!"}
+    return JsonResponse(list(response), safe=False)
+
+@is_loggedin
+def logout(request,user):
+    request.session.flush()
+    return render(request, 'genatweetor/login.html', {'responseMessage': "Successfully Signed-out! Thank you for using genatweetor!!"})

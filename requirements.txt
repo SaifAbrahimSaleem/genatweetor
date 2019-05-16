@@ -6,4 +6,8 @@ twython
 twython-django
 psycopg2-binary
 whitenoise
-rest-pandas
+numpy
+gensim
+sklearn
+nltk
+tweet-generator

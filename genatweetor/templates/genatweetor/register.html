@@ -12,7 +12,7 @@
   <body>
     {% block body-content %}
       <div class="logo">
-        <img src="{% static 'backgroundImages/Genatweetor_Logo.png' %}">
+        <a href="{% url 'genatweetor:index'%}"><img src="{% static 'backgroundImages/Genatweetor_Logo.png' %}"></a>
       </div>
       <div class="register-form">
         <div class="form-row">
@@ -97,12 +97,7 @@
                       <input type="password" class="form-control column d-block" id="password" name="password" placeholder="Enter Password">
                     </div>
 
-                    <div class="form-group row col-xs-20">
-                      <label for="confirm-password" class="form-label col-sm-4 col-form-label">Confirm Password</label>
-                      <input type="password" class="form-control column d-block" id="confirm-password" name="confirm-password" placeholder="Confirm Password">
-                    </div>
-
-                    <button class="form-button btn btn-danger btn-lg" type="button" id="back1">Back</button>
+                <button class="form-button btn btn-danger btn-lg" type="button" id="back1">Back</button>
                     <button class="form-button btn btn-success btn-lg" type="button" id="next2">Next</button>
                   </fieldset>
 

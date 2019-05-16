@@ -31,24 +31,22 @@
                   <a class="nav-link active" href="{% url 'genatweetor:dashboard' %}"><i class="fas fa-home"></i></a>
                 </div>
               </div>
-
               <div class="logo">
-                <img src="{% static 'backgroundImages/Genatweetor_Logo.png' %}">
+                <img src="{% static 'backgroundImages/Genatweetor_Logo.png' %}" href="{% url 'genatweetor:dashboard' %}">
               </div>
-
-
               <div class="nav-item-list">
                 <a class="nav-link active" href="{% url 'genatweetor:tweetsArchive' %}">Tweets Archive</a>
-              </div>
-              <div class="nav-item-list">
-                <a class="nav-link active" href="{% url 'genatweetor:statistics' %}">Statistics</a>
               </div>
               <div class="nav-item-list">
                 <a class="nav-link active" href="{% url 'genatweetor:generateTweet' %}">Generate Tweet</a>
               </div>
             </ul>
           </div>
+          <div class="logout"style="width:100%; bottom:0;">
+            <a class="active btn btn-danger align-self-end" href="{% url 'genatweetor:logout' %}" style="width:100%; bottom:0;">logout</a>
+          </div>
         </nav>
+
       </div>
     {% block body-content %}
     {% endblock %}
