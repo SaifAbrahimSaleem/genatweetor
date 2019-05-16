@@ -126,11 +126,12 @@ def dashboard(request, user):
      # if user denied authorization
     if 'denied' in request.session:
         return HttpResponse("USER DENIED")
-    oAuthVerifier = request.GET['oauth_verifier']
-    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
-    tokens = twitter.get_authorized_tokens(oAuthVerifier)
-    request.session['oauth_token']= tokens['oauth_token']
-    request.session['oauth_token_secret'] = tokens['oauth_token_secret']
+    if 'oauth_verifier' in request.GET:
+        oAuthVerifier = request.GET['oauth_verifier']
+        twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
+        tokens = twitter.get_authorized_tokens(oAuthVerifier)
+        request.session['oauth_token']= tokens['oauth_token']
+        request.session['oauth_token_secret'] = tokens['oauth_token_secret']
     newTwitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
     user_credentials = newTwitter.verify_credentials()
     userID = str(user.id)
