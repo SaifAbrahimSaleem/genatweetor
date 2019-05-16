@@ -131,7 +131,7 @@ def dashboard(request, user):
     tokens = twitter.get_authorized_tokens(oAuthVerifier)
     request.session['oauth_token']= tokens['oauth_token']
     # OAUTHTOKEN
-    OAUTHTOKENSECRET
+    #OAUTHTOKENSECRET
     request.session['oauth_token_secret'] = tokens['oauth_token_secret']
     credentials = twitter.verify_credentials()
     userID = str(user.id)
