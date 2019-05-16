@@ -334,7 +334,7 @@ def trainModel(user):
             else:
                 continue
         model = Word2Vec(clean_tweets, size=150, window=10, min_count=1,workers=10,iter=10)
-        model.train(clean_tweets, total_examples=model.corpus_count, epochs=w2vModel.iter)
+        model.train(clean_tweets, total_examples=model.corpus_count, epochs=model.iter)
         model.save(file)
     return
 
