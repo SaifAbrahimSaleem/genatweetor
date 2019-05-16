@@ -126,7 +126,11 @@ def dashboard(request, user):
      # if user denied authorization
     if 'denied' in request.session:
         return HttpResponse("USER DENIED")
-    twitter = Twython(settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
+    oAuthVerifier = request.GET['oauth_verifier']
+    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
+    tokens = twitter.get_authorized_tokens(oAuthVerifier)
+    OAUTHTOKEN = tokens['oauth_token']
+    OAUTHTOKENSECRET = tokens['oauth_token_secret']
     credentials = twitter.verify_credentials()
     userID = str(user.id)
     location = 'temp/word2vecModels/word2vecModel-User'
@@ -199,7 +203,7 @@ def profile(request, user):
 @is_loggedin
 def getTwitterProfile(request, user):
     profileAttributes = []
-    twitter = Twython(settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
+    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
     credentials = twitter.verify_credentials()
     screenName = credentials['screen_name']
 
@@ -223,7 +227,7 @@ def getTwitterProfile(request, user):
 @is_loggedin
 def getDjangoProfile(request, user):
     profileAttributes = []
-    twitter = Twython(settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
+    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
     credentials = twitter.verify_credentials()
     screenName = credentials['screen_name']
     userAttributes = twitter.show_user(screen_name=screenName)
@@ -272,7 +276,7 @@ def tweetsArchive(request, user):
 
 @is_loggedin
 def getTweets(request,user):
-    twitter = Twython(settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
+    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
     credentials = twitter.verify_credentials()
     tweetObjects = Tweet.objects.filter(tweetedBy=credentials['screen_name'])
     if tweetObjects:
@@ -343,7 +347,7 @@ def updateTimeline(request,user):
             return response
         else:
             count = int(request.POST['count'])
-            twitter = Twython(settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
+            twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
             credentials = twitter.verify_credentials()
             SCREEN_NAME = credentials['screen_name']
             try:
@@ -418,7 +422,7 @@ def generateTweets(request,user):
     if 'count' in request.POST:
         count = request.POST['count']
         generatedTweets = []
-        twitter = Twython(settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
+        twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
         credentials = twitter.verify_credentials()
         twitter_id = credentials['id']
         generator = tweet_generator.PersonTweeter(str(twitter_id), settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
@@ -430,7 +434,7 @@ def generateTweets(request,user):
 @is_loggedin
 def postTweet(request,user):
     tweetText = request.POST['tweetText']
-    twitter = Twython(settings.APP_KEY, settings.APP_SECRET, settings.ACCESS_TOKEN, settings.ACCESS_SECRET)
+    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
     twitter.update_status(status=tweetText)
     response = {"Successful!"}
     return JsonResponse(list(response), safe=False)

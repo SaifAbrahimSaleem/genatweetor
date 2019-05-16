@@ -37,7 +37,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['.herokuapp.com']
 
-# Error Logging
+# Error Logging 
 
 LOGGING = {
     'version': 1,
