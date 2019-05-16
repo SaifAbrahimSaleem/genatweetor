@@ -129,8 +129,10 @@ def dashboard(request, user):
     oAuthVerifier = request.GET['oauth_verifier']
     twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
     tokens = twitter.get_authorized_tokens(oAuthVerifier)
-    OAUTHTOKEN = tokens['oauth_token']
-    OAUTHTOKENSECRET = tokens['oauth_token_secret']
+    request.session['oauth_token']= tokens['oauth_token']
+    # OAUTHTOKEN
+    OAUTHTOKENSECRET
+    request.session['oauth_token_secret'] = tokens['oauth_token_secret']
     credentials = twitter.verify_credentials()
     userID = str(user.id)
     location = 'temp/word2vecModels/word2vecModel-User'
