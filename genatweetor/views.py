@@ -348,7 +348,7 @@ def updateTimeline(request,user):
             except TwythonError as e:
                 raise Http404(e)
             for tweet in user_timeline:
-                id = int(tweet['id_str'])
+                id = tweet['id_str']
                 favouritecounter = tweet['favorite_count']
                 retweetcounter = tweet['retweet_count']
                 if Tweet.objects.filter(tweetID=id).exists():
