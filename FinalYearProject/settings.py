@@ -34,9 +34,9 @@ ACCESS_SECRET= "95idexegEPYioUTWH9qAql6pTJEowcFFjRStrre7xNc1l"
 SECRET_KEY = '^$)g*kvy#cp15s5w5oz(eh5^trs9wtwfxgyiz97x4kqmr!%1b$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = [] #CHANGE TO
+ALLOWED_HOSTS = ['https://genatweetor.herokuapp.com/'] #CHANGE TO
 
 # Application definition
 
