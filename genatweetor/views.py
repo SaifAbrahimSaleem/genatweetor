@@ -38,14 +38,14 @@ def is_loggedin(view):
 #LOGIN VIEW
 def index(request):
     response ={
-        'responseMessage' : "Welcome To genatweetor! Login to Continue!"
+        'response' : "Welcome To genatweetor! Login to Continue!"
     }
     return render(request, 'genatweetor/login.html', response)
 
 def login(request):
     if not ('form-username' in request.POST and 'form-password' in request.POST):
         response = {
-            'responseMessage' : "Please enter your username or password correctly!"
+            'response' : "Please enter your username or password correctly!"
         }
         return(request, 'genatweetor/login.html', response)
     else:
@@ -55,7 +55,7 @@ def login(request):
             user = User.objects.get(username=username)
         except(User.DoesNotExist):
             response = {
-                'responseMessage': "User does not exist, Please try a different Username"
+                'response': "User does not exist, Please try a different Username"
             }
             return render(request, 'genatweetor/login.html', response)
         if(user.check_password(password)):
@@ -78,7 +78,7 @@ def login(request):
             return dashboard(request)
         else:
             response = {
-                'responseMessage':"Incorrect Username or Password. Please Try again!"
+                'response':"Incorrect Username or Password. Please Try again!"
             }
             return render(request, 'genatweetor/login.html', response)
 
@@ -91,14 +91,14 @@ def register(request):
     password = request.POST.get('password')
     if not 'firstName' in request.POST and not 'lastName' in request.POST and not 'username' in request.POST and not 'email' in request.POST and not 'dob' in request.POST and not 'password' in request.POST:
         response = {
-        'responseMessage' : "Please fill in all fields to Register!"
+        'response' : "Please fill in all fields to Register!"
         }
         return render(request, 'genatweetor/register.html', response)
 
     else:
         if username == '' or password == '':
             response = {
-                'responseMessage' : "Please enter a username and password!"
+                'response' : "Please enter a username and password!"
             }
             return render(request, 'genatweetor/register.html', response)
         user = User(username=username, first_name=firstName, last_name=lastName, email=email, dob=dateOfBirth)
@@ -109,15 +109,15 @@ def register(request):
             # If any credentials are already saved to the database
         except IntegrityError as e:
             response = {
-                'responseMessage' : "Username or E-mail is already Taken, Please enter something different"
+                'response' : "Username or E-mail is already Taken, Please enter something different"
                 }
             return render(request, 'genatweetor/register.html', response)
         response = {
-            'responseMessage' : "You have been successfully registered! You can now Login!"
+            'response' : "You have been successfully registered! You can now Login!"
         }
         return render(request, 'genatweetor/login.html', response)
     response = {
-        'responseMessage' : "You have been successfully registered! You can now Login!"
+        'response' : "You have been successfully registered! You can now Login!"
     }
     return render(request, 'genatweetor/login.html', response)
 
@@ -173,7 +173,7 @@ def dashboard(request, user):
         'tweetCount' : user.getTweetCount(),
         'followerCount': user.getFollowerCount(),
         'accountDescription' : user.accountDescription,
-        'responseMessage' : "Welcome to Genatweetor",
+        'response' : "Welcome to Genatweetor",
         'retweetScore':AverageRetweetScore,
         'favouriteScore':AverageFavouriteScore,
         'engagementScore':engagementScore,
@@ -335,7 +335,7 @@ def updateTimeline(request,user):
         tweets = []
         if not 'count' in request.POST:
             response = {
-                'responseMessage':"Please enter a value!"
+                'response':"Please enter a value!"
             }
             return response
         else:
@@ -391,20 +391,20 @@ def deleteTweet(request, tweetID):
         if Tweet.objects.filter(tweetID=tweetID).exists():
             delTweet = Tweet.objects.filter(tweetID=tweetID)
             delTweet.delete()
-            responseMessage = {
+            response = {
                 "Deleted!"
             }
-            return JsonResponse(list(responseMessage), safe=False)
+            return JsonResponse(list(response), safe=False)
         else:
-            responseMessage = {
+            response = {
                 "OOPS! Something went Wrong! The tweet you tried to delete does not exist!"
             }
-            return JsonResponse(list(responseMessage), safe=False)
+            return JsonResponse(list(response), safe=False)
     else:
-        responseMessage = {
+        response = {
             "OOPS! Something went Wrong!"
         }
-        return JsonResponse(list(responseMessage), safe=False)
+        return JsonResponse(list(response), safe=False)
 
 @is_loggedin
 def generateTweet(request,user):
@@ -435,4 +435,4 @@ def postTweet(request):
 @is_loggedin
 def logout(request,user):
     request.session.flush()
-    return render(request, 'genatweetor/login.html', {'responseMessage': "Successfully Signed-out! Thank you for using genatweetor!!"})
+    return render(request, 'genatweetor/login.html', {'response': "Successfully Signed-out! Thank you for using genatweetor!!"})
