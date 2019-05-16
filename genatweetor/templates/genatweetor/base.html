@@ -14,7 +14,7 @@
     <title>Genatweetor: generate personalised tweets!</title>
   </head>
   <body>
-    {% if responseMessage %}
+    {% if response %}
       <div class="bannerAlert">
         <div id="alert-area" class="alert alert-success alert-dismissible" role="alert"></div>
       </div>
@@ -26,7 +26,7 @@
         $("#alert-area").append($("<div class='alert-message " + type + " fade in' data-alert><p> " + message + " </p></div>"));
         $("#alert-area").delay(3500).fadeOut("slow", function () { $(this).remove(); });
       }
-      newAlert('success', '<strong>{{ responseMessage }}</strong>');
+      newAlert('success', '<strong>{{ response }}</strong>');
     </script>
 
   </body>
