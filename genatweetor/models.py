@@ -47,9 +47,9 @@ class User(User): # class User extends django.contrib.auth.model's current User 
 class Tweet(models.Model): # Class tweet extends the model class
     userTweeted = models.ForeignKey(User, on_delete=models.CASCADE) # store the user associated with the tweet, when deleted cascade the entry
     # fields can be blank as the user will not have a tweet associated with their account until they stream the tweet from twitter
-    tweetID = models.CharField(primary_key=True, blank=True) # Store the tweet ID in a character field. This could potentially be the primary key
+    tweetID = models.TextField(primary_key=True,blank=True) # Store the tweet ID in a character field. This could potentially be the primary key
     tweetedBy = models.CharField(max_length=100, blank=True) # Store the screen name of the user tweeted in a character field. This may have use in future if time is permitting
-    tweetText = models.CharField(max_length=250, blank=True) # Store the text associated with the tweet in a character field
+    tweetText = models.TextField(max_length=250, blank=True) # Store the text associated with the tweet in a character field
     tweetDate = models.DateTimeField('Date Tweeted') # Store the date associated with the tweet in a date time field
     tweetFavourites = models.IntegerField(default=0, blank=True) # Store the number of favourites associated with the tweet in an integer field
     tweetRetweets = models.IntegerField(default=0, blank=True) # store the number of retweets associated with the tweet in an integer field
