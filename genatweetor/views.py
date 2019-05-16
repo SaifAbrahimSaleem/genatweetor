@@ -130,10 +130,9 @@ def dashboard(request, user):
     twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
     tokens = twitter.get_authorized_tokens(oAuthVerifier)
     request.session['oauth_token']= tokens['oauth_token']
-    # OAUTHTOKEN
-    #OAUTHTOKENSECRET
     request.session['oauth_token_secret'] = tokens['oauth_token_secret']
-    credentials = twitter.verify_credentials()
+    newTwitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
+    user_credentials = newTwitter.verify_credentials()
     userID = str(user.id)
     location = 'temp/word2vecModels/word2vecModel-User'
     file = location + userID + ".txt"
@@ -173,9 +172,9 @@ def dashboard(request, user):
         silScore = 0
     response = {
         'name' : user.first_name + " " + user.last_name,
-        'twitterName': credentials['name'],
+        'twitterName': user_credentials['name'],
         'user': user.username,
-        'screen_name': credentials['screen_name'],
+        'screen_name': user_credentials['screen_name'],
         'email': user.email,
         'dob': user.dob,
         'age': user.getUserAge(),
