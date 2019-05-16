@@ -127,7 +127,7 @@ def dashboard(request, user):
     if 'denied' in request.session:
         return HttpResponse("USER DENIED")
     oAuthVerifier = request.GET['oauth_verifier']
-    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=settings.ACCESS_TOKEN, oauth_token_secret=settings.ACCESS_SECRET)
+    twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
     tokens = twitter.get_authorized_tokens(oAuthVerifier)
     OAUTHTOKEN = tokens['oauth_token']
     OAUTHTOKENSECRET = tokens['oauth_token_secret']
