@@ -1,39 +1,38 @@
-from django.conf import settings #then do settings.theVariableYouWantToAccess
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.http import HttpResponse, JsonResponse, Http404
-from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
-from django.db import IntegrityError
-from .models import User, Tweet
-from twython import Twython, TwythonError
-from datetime import datetime, timezone
-from gensim.models import Word2Vec
-from nltk.cluster import KMeansClusterer
-from sklearn import cluster, metrics
-from tweet_generator import tweet_generator
+from django.conf import settings # import the settings for twitter keys
+from django.shortcuts import render, redirect # import the render and redirect methods from the django shortcuts package. These will be used to direct the flow of the program
+from django.http import HttpResponse, JsonResponse, Http404 # import response methods
+from django.db import IntegrityError # import an Integrity exception for when the data integrity of the database has been breached.
+from .models import User, Tweet # import the User and Tweet models in order to create, delete and manipulate modelled datastructures
+from twython import Twython, TwythonError #Import Twython, the module which is used to aid in tritter communications
+from datetime import datetime, timezone #import datetime and datetimezone from the datetime module. These will be used later on when converting from Twitter time to UTC time
+from gensim.models import Word2Vec # Import the Word2Vec model from gensims model package
+from nltk.cluster import KMeansClusterer # import the KMeansClusterer model from nltk's cluster package
+from sklearn import cluster, metrics # import the cluster and metrics models from SKlearn for later use when calculating KMeans
+from tweet_generator import tweet_generator # Import the Tweet Generator Model from the Tweet Generator package
 import gensim
 import nltk
 import pytz
 import os
 
 
-appname = 'genatweetor'
-NUMBER_OF_CLUSTERS = 10
-
-def is_loggedin(view):
+appname = 'genatweetor' # declare the application name. This allows for traversal through the application directories
+NUMBER_OF_CLUSTERS = 10 # set the number of clusers to 10. This number was simply chosen and thus holds no significance
+# in the reasons for as to why it was chosen
+# create a decorator which will keep track of the user's state each time a view is executed. in this case the decorator method is checking to see if the user is logged in
+# This particular decorator was inspired by the Web Programming group project
+def is_loggedin(view): # take the view as an argument
     def isloggedinView(request):
         #Check to see if the user's username is in the request
-        if 'username' in request.session:
-            username = request.session['username']
-            try:
-                userAccount = User.objects.get(username=username)
-            except User.DoesNotExist:
-                raise Http404('That username does not exist! Please Try again!')
-            return view(request, userAccount)
-        else:
-            return render(request, 'genatweetor/login.html')
-    return isloggedinView
+        if 'username' in request.session: # if the username is in the session variable
+            username = request.session['username'] # create a new variable called username and give it the value of the username session variable
+            try: # attempt to search for the user to return it later on in the program
+                userAccount = User.objects.get(username=username) # if the user exists, store it as a variable
+            except User.DoesNotExist: # otherwise if the user does not exist, throw an error
+                raise Http404('That username does not exist! Please Try again!') # raise a http 404 response to the user saying that the user does not exist
+            return view(request, userAccount) # otherwise, return the view which is being evaluated, passing the request and the account that has been found
+        else: # otherwise if the username is not contained in the session variable
+            return render(request, 'genatweetor/login.html') # return the login template with the request.
+    return isloggedinView # return to the view
 
 #LOGIN VIEW
 def index(request):
@@ -335,6 +334,7 @@ def trainModel(user):
                 else:
                     continue
             model = Word2Vec(clean_tweets, size=150, window=10, min_count=1,workers=10,iter=10)
+            file = location + userID
             model.save(file)
     return
 
@@ -433,15 +433,16 @@ def generateTweets(request,user):
             generatedTweets.append(generated_tweet)
         return JsonResponse(list(generatedTweets), safe=False)
 
-@is_loggedin
+########## POSTING THE RECOMMENDED TWEET TO TWITTER ##########
+@is_loggedin # if the user is logged in
 def postTweet(request,user):
-    tweetText = request.POST['tweetText']
+    tweetText = request.POST['tweetText'] # take the text of th egenerated tweet from the post data
     twitter = Twython(app_key=settings.APP_KEY, app_secret=settings.APP_SECRET, oauth_token=request.session['oauth_token'], oauth_token_secret=request.session['oauth_token_secret'])
     twitter.update_status(status=tweetText)
     response = {"Successful!"}
     return JsonResponse(list(response), safe=False)
-
-@is_loggedin
+##############################################################
+@is_loggedin # if the user is logged in
 def logout(request,user):
-    request.session.flush()
+    request.session.flush() # flush the session and return the login template with the context being the response
     return render(request, 'genatweetor/login.html', {'response': "Successfully Signed-out! Thank you for using genatweetor!!"})
