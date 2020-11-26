@@ -1,5 +1,5 @@
 # Final Year Project – Supporting Materials Student Name: Saif Saleem   Supervisor: Dr. Laurissa Tokarchuk Student ID: 160437333
-# Genatweetor: Exploring engagement and tweet generation through recommender systems using machine learning 
+# Genatweetor: Exploring engagement and tweet generation 
 
 README 
 
@@ -46,6 +46,3 @@ The admin section of the application is a representation of saved entities and a
             OR (if running locally) 
              127.0.0.1:8000/admin 
              
- Login using the following credentials: 
-# Username: Administrator 
-# Password: Admin123 
